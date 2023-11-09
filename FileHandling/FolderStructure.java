@@ -32,30 +32,29 @@ public class FolderStructure {
         }
     }
 
-    public boolean exists(String[] Paths)
+    public FolderStructure getFolder(String path)
     {
-        if (Paths.length > 1)
+        for (int i = 0; i < subFolders.size(); i++)
         {
-            for (int i = 0; i < subFolders.size(); i++)
+            FolderStructure targetStructure = subFolders.get(i);
+            if(targetStructure.getName() == path)
             {
-                FolderStructure targetFolder = subFolders.get(i);
-                if (Paths[0] == targetFolder.getName())
-                {
-                    return targetFolder.exists(Arrays.copyOfRange(Paths, 1, Paths.length));
-                }
+                return targetStructure;
             }
         }
-        else
+        throw new IllegalArgumentException("Failed to find folder: " + path + " in folder: " + folderName);
+    }
+    public FileStructure getFile(String path)
+    {
+        for (int i = 0; i < fileList.size(); i++)
         {
-            for (int i = 0; i < fileList.size(); i++)
+            FileStructure targetStructure = fileList.get(i);
+            if(targetStructure.getName() == path)
             {
-                if (fileList.get(i).getName() == Paths[0])
-                {
-                    return true;
-                }
+                return targetStructure;
             }
         }
-        return false;
+        throw new IllegalArgumentException("Failed to find file: " + path + " in folder: " + folderName);
     }
     public String getName()
     {

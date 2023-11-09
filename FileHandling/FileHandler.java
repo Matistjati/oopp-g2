@@ -12,9 +12,29 @@ public class FileHandler {
         topFolder = new FolderStructure(folderPath);
     }
 
-    public boolean exists(String path)
+    public FolderStructure getFolder(String[] paths)
+    {
+        FolderStructure targetStructure = topFolder;
+        for (int i = 0; i < paths.length; i++)
+        {
+            targetStructure = targetStructure.getFolder(paths[i]);
+        }
+
+        return  targetStructure;
+    }
+
+    public FolderStructure getFolder(String path)
+    {
+        return getFolder(path.split("/"));
+    }
+
+    public FileStructure getFile(String path)
     {
         String[] paths = path.split("/");
-        return true;
+        String [] folderPaths = new String[paths.length - 1];
+
+        System.arraycopy(paths, 1, folderPaths, 0, paths.length);
+        FolderStructure folder = getFolder(folderPaths);
+        return folder.getFile(paths[paths.length - 1]);
     }
 }
