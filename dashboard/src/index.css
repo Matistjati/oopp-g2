@@ -1,0 +1,73 @@
+@font-face {
+  font-family: 'Archivo';
+  src: url(./assets/fonts/Archivo-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url(./assets/fonts/NotoSans-Regular.ttf);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  font-family: 'Noto Sans';
+}
+
+input, button {
+  all: unset;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-small {
+  gap: .3rem;
+}
+
+.gap-medium {
+  gap: .7rem;
+}
+
+.panel {
+
+}
+
+.padding-medium {
+  padding: .7rem;
+}
+
+.padding-big {
+  padding: 1.2rem;
+}
+
+.radius-medium {
+  border-radius: 0rem;
+}
+
+.background-1 {
+  background-color: #000;
+}
+
+.background-2 {
+  background-color: #202020;
+}
+
+.background-3 {
+  background-color: #191919;
+}
+
+.text-1 {
+  color: #fff
+}

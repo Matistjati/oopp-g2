@@ -1,0 +1,15 @@
+#server-select-panel {
+    min-width: 17rem;
+}
+
+#recent-files-panel {
+    min-height: 12rem;
+}
+
+#file-browser-panel {
+    flex-grow: 1;
+}
+
+#filter-panel {
+    align-items: flex-start;
+}

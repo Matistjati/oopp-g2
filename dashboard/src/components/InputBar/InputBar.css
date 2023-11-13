@@ -1,0 +1,8 @@
+.input-bar {
+    box-sizing: border-box;
+    border-bottom: 1px solid transparent;
+}
+
+.input-bar:focus {
+    border-color: #fff;
+}

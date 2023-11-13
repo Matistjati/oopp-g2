@@ -1,0 +1,12 @@
+tr > * {
+    padding: .5rem;
+}
+
+td {
+    vertical-align: middle;
+    width: 0;
+}
+
+table {
+    border-spacing: 0px;
+}
