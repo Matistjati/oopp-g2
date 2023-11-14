@@ -25,7 +25,7 @@ public class WebServer {
     }
 
     public static void main(String[] args) {
-        int port = 8000;
+        Integer port = ArgsParser.parse(args, "-port", Integer::parseInt, 8000);
         try {
             HttpServer server = WebServer.host("./html", port);
             Runtime.getRuntime().addShutdownHook(new Thread(() -> stop(server)));
