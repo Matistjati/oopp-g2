@@ -7,11 +7,11 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class StaticHandler implements HttpHandler {
-    private final String path;
-
-    public StaticHandler(String path) {
-        this.path = path;
+public class StaticRoute extends Route {
+    final String defaultHtmlPath;
+    public StaticRoute(final String defaultHtmlPath) {
+        super("/");
+        this.defaultHtmlPath = defaultHtmlPath;
     }
 
     @Override
@@ -20,9 +20,18 @@ public class StaticHandler implements HttpHandler {
         if (requestURI.equals("/")) {
             requestURI = "/index.html";
         }
-        Path filePath = FileSystems.getDefault().getPath(path, requestURI);
+        Path filePath = FileSystems.getDefault().getPath(defaultHtmlPath, requestURI);
         byte[] fileBytes = Files.readAllBytes(filePath);
         String contentType = FileTypeResolver.resolveFileType(filePath);
+
+        // debug
+
+        if (contentType.equals("application/octet-stream")) {
+            System.out.printf("DEBUG: %s has an unresolvable file type.\n", requestURI);
+        }
+
+        // debug
+
         exchange.getResponseHeaders().set("Content-Type", contentType);
         exchange.sendResponseHeaders(200, fileBytes.length);
         try (OutputStream os = exchange.getResponseBody()) {

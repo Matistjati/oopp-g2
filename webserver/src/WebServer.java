@@ -1,28 +1,35 @@
-import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpServer;
-
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.List;
 
 public class WebServer {
-    public static void host(String path, int port) throws IOException {
+    public static HttpServer host(String path, int port) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
-        server.createContext("/", new StaticHandler(path));
+        Router router = new Router(List.of(
+            new StaticRoute("./html"),
+            new GetRoute(),
+            new PostRoute()
+        ));
+        router.mount(server);
         server.setExecutor(null);
         server.start();
+        System.out.printf("Web server started on port %d.\n", port);
+        return server;
+    }
+
+    public static void stop(HttpServer server) {
+        server.stop(0);
+        System.out.printf("Web server stopped on port %d.\n", server.getAddress().getPort());
     }
 
     public static void main(String[] args) {
         int port = 8000;
         try {
-            WebServer.host("./html", port);
-            System.out.printf("Web server started on port %d.\n", port);
-        }
-        catch (IOException e) {
+            HttpServer server = WebServer.host("./html", port);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> stop(server)));
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

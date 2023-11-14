@@ -8,6 +8,8 @@ public class FileTypeResolver {
             case "html" -> "text/html";
             case "css" -> "text/css";
             case "js" -> "text/javascript";
+            case "svg" -> "image/svg+xml";
+            case "ttf" -> "font/ttf";
             default -> "application/octet-stream";
         };
     }
