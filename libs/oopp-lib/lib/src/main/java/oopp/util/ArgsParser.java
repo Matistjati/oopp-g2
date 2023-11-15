@@ -1,3 +1,5 @@
+package oopp.util;
+
 import java.util.function.Function;
 
 public class ArgsParser {

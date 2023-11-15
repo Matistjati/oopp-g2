@@ -1,3 +1,5 @@
+package oopp.util;
+
 import java.nio.file.Path;
 
 public class FileTypeResolver {

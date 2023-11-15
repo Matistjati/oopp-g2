@@ -1,9 +1,14 @@
+package webserver;
+
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import oopp.routing.Route;
+import oopp.util.FileTypeResolver;
 
 public class StaticRoute extends Route {
     final Path defaultHtmlPath;

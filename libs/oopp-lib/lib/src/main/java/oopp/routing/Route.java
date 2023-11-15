@@ -1,13 +1,14 @@
+package oopp.routing;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
-import java.util.function.Function;
 
-abstract class Route implements HttpHandler {
+public abstract class Route implements HttpHandler {
     final protected String path;
 
-    Route(String path) {
+    public Route(String path) {
         this.path = path;
     }
 
