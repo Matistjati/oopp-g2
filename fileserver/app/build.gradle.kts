@@ -13,9 +13,6 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
-    flatDir {
-        dirs("../../libs/oopp-lib/lib/build/libs")
-    }
 }
 
 dependencies {
@@ -24,7 +21,6 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:32.1.1-jre")
-    implementation(files("../../libs/oopp-lib/lib/build/libs/lib.jar"))
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -36,13 +32,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("webserver.App")
-}
-
-distributions {
-    main {
-        contents {
-            from("../../dashboard/dist")
-        }
-    }
+    mainClass.set("fileserver.App")
 }

@@ -46,7 +46,7 @@ public class StaticRoute extends Route {
             }
             exchange.close();
         }
-        catch (IOException e) { // Error occurred when reading from the stream.
+        catch (IOException e) {
             e.printStackTrace();
             sendErrorResponse(exchange, 500);
         }
