@@ -14,7 +14,7 @@ public class WebServer {
     public static HttpServer host(String path, int port) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
         Router router = new Router(List.of(
-            new StaticRoute(Path.of("./html/")),
+            new StaticRoute(Path.of("./web/")),
             new FileListRoute()
         ));
         router.mount(server);

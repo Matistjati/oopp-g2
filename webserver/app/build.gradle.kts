@@ -38,3 +38,11 @@ application {
     // Define the main class for the application.
     mainClass.set("webserver.WebServer")
 }
+
+distributions {
+    main {
+        contents {
+            from("../../dashboard/dist")
+        }
+    }
+}
