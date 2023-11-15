@@ -10,6 +10,7 @@ public class FileTypeResolver {
             case "js" -> "text/javascript";
             case "svg" -> "image/svg+xml";
             case "ttf" -> "font/ttf";
+            case "ico" -> "image/x-icon";
             default -> "application/octet-stream";
         };
     }

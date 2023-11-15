@@ -2,15 +2,15 @@ import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.file.Path;
 import java.util.List;
 
 public class WebServer {
     public static HttpServer host(String path, int port) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
         Router router = new Router(List.of(
-            new StaticRoute("./html"),
-            new GetRoute(),
-            new PostRoute()
+            new StaticRoute(Path.of("./html/")),
+            new FileListRoute()
         ));
         router.mount(server);
         server.setExecutor(null);

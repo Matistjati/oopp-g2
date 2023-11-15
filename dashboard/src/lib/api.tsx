@@ -1,5 +1,5 @@
 function fetchFileList() {
-    fetch('/api/get')
+    fetch('/api/fileList')
     .then(response => response.json())
     .then(data => {
         // Handle data
