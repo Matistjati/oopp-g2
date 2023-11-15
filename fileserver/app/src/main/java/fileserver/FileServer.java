@@ -1,25 +1,19 @@
-package webserver;
+package fileserver;
 
 import com.sun.net.httpserver.HttpServer;
+import oopp.routing.Router;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
 
-import oopp.routing.Router;
-
-public class WebServer {
+public class FileServer {
     private final HttpServer httpServer;
-    private final FileServerRegistry fileServerRegistry;
 
-    WebServer(String path, int port) {
-        fileServerRegistry = new FileServerRegistry();
+    FileServer(int port) {
         this.httpServer = create(port);
         Router router = new Router(List.of(
-                new RegistryRoute(this),
-                new StaticRoute(Path.of("./web/")),
-                new FileListRoute()
+
         ));
         router.mount(this.httpServer);
     }
@@ -38,15 +32,11 @@ public class WebServer {
 
     public void start() {
         this.httpServer.start();
-        System.out.printf("Web server started on port %d.\n", this.httpServer.getAddress().getPort());
+        System.out.printf("File server started on port %d.\n", this.httpServer.getAddress().getPort());
     }
 
     public void stop() {
         this.httpServer.stop(0);
-        System.out.printf("Web server stopped on port %d.\n", this.httpServer.getAddress().getPort());
-    }
-
-    public FileServerRegistry getFileServerRegistry() {
-        return fileServerRegistry;
+        System.out.printf("File server stopped on port %d.\n", this.httpServer.getAddress().getPort());
     }
 }
