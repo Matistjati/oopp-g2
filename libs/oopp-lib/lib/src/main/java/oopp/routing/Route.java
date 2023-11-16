@@ -34,6 +34,10 @@ public abstract class Route implements HttpHandler {
         handleUnsupportedMethod(exchange);
     }
 
+    protected void putRequest(HttpExchange exchange) {
+        handleUnsupportedMethod(exchange);
+    }
+
     protected void postRequest(HttpExchange exchange) {
         handleUnsupportedMethod(exchange);
     }
@@ -42,7 +46,8 @@ public abstract class Route implements HttpHandler {
     public void handle(HttpExchange exchange) {
         switch (exchange.getRequestMethod()) {
             case "GET" -> getRequest(exchange);
-            case "PUT" -> postRequest(exchange);
+            case "PUT" -> putRequest(exchange);
+            case "POST" -> postRequest(exchange);
             default -> handleUnsupportedMethod(exchange);
         }
     }

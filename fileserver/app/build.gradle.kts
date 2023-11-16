@@ -25,6 +25,8 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:32.1.1-jre")
     implementation(files("../../libs/oopp-lib/lib/build/libs/lib.jar"))
+    implementation("org.ini4j:ini4j:0.5.4")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

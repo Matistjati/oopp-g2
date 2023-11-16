@@ -1,9 +1,6 @@
 package webserver;
 
-import com.sun.net.httpserver.HttpServer;
-
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -17,7 +14,7 @@ public class WebServer extends Server {
         super(port);
         fileServerRegistry = new FileServerRegistry();
         Router router = new Router(List.of(
-                new RegistryRoute(this),
+                new DiscoveryRoute(this),
                 new StaticRoute(Path.of("./web/")),
                 new FileListRoute()
         ));
@@ -36,7 +33,7 @@ public class WebServer extends Server {
         System.out.printf("Web server stopped on port %d.\n", this.httpServer.getAddress().getPort());
     }
 
-    public FileServerRegistry getFileServerRegistry() {
-        return fileServerRegistry;
+    public void registerFileServer(ServerInfo serverInfo) {
+        // TODO: implement
     }
 }
