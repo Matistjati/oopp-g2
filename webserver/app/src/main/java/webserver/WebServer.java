@@ -8,14 +8,14 @@ import java.nio.file.Path;
 import java.util.*;
 
 import oopp.routing.Router;
+import oopp.server.Server;
 
-public class WebServer {
-    private final HttpServer httpServer;
+public class WebServer extends Server {
     private final FileServerRegistry fileServerRegistry;
 
-    WebServer(String path, int port) {
+    WebServer(String path, int port) throws IOException {
+        super(port);
         fileServerRegistry = new FileServerRegistry();
-        this.httpServer = create(port);
         Router router = new Router(List.of(
                 new RegistryRoute(this),
                 new StaticRoute(Path.of("./web/")),
@@ -24,25 +24,15 @@ public class WebServer {
         router.mount(this.httpServer);
     }
 
-    private static HttpServer create(int port) {
-        try {
-            HttpServer httpServer = HttpServer.create(new InetSocketAddress("localhost", port), 0);
-            httpServer.setExecutor(null);
-            return httpServer;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+    @Override
     public void start() {
-        this.httpServer.start();
+        super.start();
         System.out.printf("Web server started on port %d.\n", this.httpServer.getAddress().getPort());
     }
 
+    @Override
     public void stop() {
-        this.httpServer.stop(0);
+        super.stop();
         System.out.printf("Web server stopped on port %d.\n", this.httpServer.getAddress().getPort());
     }
 
