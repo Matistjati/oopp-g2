@@ -2,12 +2,15 @@ package filehandling;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileHandler {
     private String folderPath;
     private FolderStructure topFolder;
+    final String metadataSavePath = "./metadata.json";
     public FileHandler(String folderPath)
     {
         this.folderPath = folderPath;
@@ -84,6 +87,31 @@ public class FileHandler {
     {
         FolderStructure targetFolder = getFolder(folderPath);
         targetFolder.createFolder(foldername);
+    }
+
+    public String getMetaDataJsonString()
+    {
+        return new JsonFolder(topFolder).toString();
+    }
+
+    public void saveMetadata()
+    {
+        JsonFolder metadataFolder = new JsonFolder(topFolder);
+        try {
+            File metadataFile = new File(metadataSavePath);
+            if (!(metadataFile.exists())) {
+                metadataFile.createNewFile();
+            }
+            FileWriter writer = new FileWriter(metadataSavePath, false);
+            writer.write(metadataFolder.toString());
+            writer.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
     }
 
 }
