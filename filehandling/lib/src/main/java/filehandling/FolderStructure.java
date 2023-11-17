@@ -44,7 +44,7 @@ public class FolderStructure {
         for (int i = 0; i < subFolders.size(); i++)
         {
             FolderStructure targetStructure = subFolders.get(i);
-            if(targetStructure.getName() == path)
+            if(targetStructure.getName().equals(path))
             {
                 return targetStructure;
             }
@@ -83,10 +83,16 @@ public class FolderStructure {
     {
         subFolders.add(new FolderStructure(folderName + "/" + name));
     }
-    public String getName()
+    public String getPath()
     {
         return folderName;
     }
+    public String getName(){
+        String[] paths = folderName.split("/");
+        return paths[paths.length - 1];
+    }
+
+
 
 
 }

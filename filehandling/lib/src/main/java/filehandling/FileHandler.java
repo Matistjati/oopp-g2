@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +23,7 @@ public class FileHandler {
     {
         FolderStructure targetStructure = topFolder;
         int startPosition = 0;
-        String[] topFolderPaths = topFolder.getName().split("/");
+        String[] topFolderPaths = topFolder.getPath().split("/");
 
         if (paths.length >= 2 && paths[0].equals(topFolderPaths[0]) && paths[1].equals(topFolderPaths[1]))
         {
@@ -114,4 +116,49 @@ public class FileHandler {
 
     }
 
+    public String loadMetadataFromFile()
+    {
+        String output = "";
+        try {
+            File targetFile = new File(metadataSavePath);
+            Scanner reader = new Scanner(targetFile);
+            while (reader.hasNext()) {
+                output += reader.next();
+            }
+            reader.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return output;
+    }
+
+    public void loadFromMetadata(JsonFolder targetFolder)
+    {
+        JsonFolder[] folders = targetFolder.getFolders();
+        for (int i = 0; i < folders.length; i++)
+        {
+            loadFromMetadata(folders[i]);
+        }
+
+        FolderStructure folderStructure = getFolder(targetFolder.getPath());
+        List<FileStructure> fileStructures = folderStructure.getFiles();
+        JsonFile[] jsonFiles = targetFolder.getFiles();
+        for (int i = 0; i < fileStructures.size(); i++)
+        {
+            for (int k = 0; k < jsonFiles.length; k++)
+            {
+                if(jsonFiles[k].getPath().equals(fileStructures.get(i).getPath()))
+                {
+                    fileStructures.get(i).updateFromJsonFile(jsonFiles[k]);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void loadFromMetadata()
+    {
+        loadFromMetadata(new JsonFolder(loadMetadataFromFile()));
+    }
 }

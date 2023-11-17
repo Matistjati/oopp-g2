@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LibraryTest {
     @Test void someLibraryMethodReturnsTrue() {
         FileHandler handler = new FileHandler("./testDirectory");
-        System.out.println(new JsonFolder(new JSONObject(handler.getMetaDataJsonString())));
+        handler.loadFromMetadata();
+        System.out.println(new JsonFolder(new JSONObject(handler.getMetaDataJsonString())).getFolders()[0].toString());
     }
 }

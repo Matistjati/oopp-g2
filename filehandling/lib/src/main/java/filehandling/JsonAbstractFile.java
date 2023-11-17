@@ -3,19 +3,19 @@ package filehandling;
 import org.json.JSONObject;
 
 public abstract class JsonAbstractFile extends JSONObject {
-    private String path;
+    final static String pathKey = "path";
     public JsonAbstractFile(String path)
     {
-        this.put("path", path);
+        this.put(pathKey, path);
     }
 
     public String getPath() {
-        return path;
+        return this.getString(pathKey);
     }
 
     public String getName()
     {
-        String[] paths = path.split("/");
+        String[] paths = this.getString(pathKey).split("/");
         return paths[paths.length - 1];
     }
 }

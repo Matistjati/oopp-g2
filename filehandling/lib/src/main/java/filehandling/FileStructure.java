@@ -95,6 +95,11 @@ public class FileStructure {
         }
     }
 
+    public void updateFromJsonFile(JsonFile updateSource)
+    {
+        this.lastModifiedDate = updateSource.getModifiedDate();
+    }
+
     enum FileLocks {
         read,
         write,
