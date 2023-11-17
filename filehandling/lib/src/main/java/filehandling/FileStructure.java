@@ -1,4 +1,4 @@
-package src;
+package filehandling;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ public class FileStructure {
     public FileStructure(String filePath)
     {
         this.filePath = filePath;
-        System.out.println(filePath);
         lastModifiedDate = new Date();
         File targetFile = new File(filePath);
         if (!(targetFile.exists()))

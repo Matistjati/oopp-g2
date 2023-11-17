@@ -1,4 +1,4 @@
-package src;
+package filehandling;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -11,6 +11,7 @@ import java.util.List;
 
 public class FolderStructure {
     private String folderName;
+    private FileStructure newFile = new FileStructure("./testDirectory/Hello.txt");
     private ArrayList<FolderStructure> subFolders = new ArrayList<>();
     private ArrayList<FileStructure> fileList = new ArrayList<>();
 
@@ -63,6 +64,15 @@ public class FolderStructure {
         throw new IllegalArgumentException("Failed to find file: " + path + " in folder: " + folderName);
     }
 
+    public ArrayList<FileStructure> getFiles()
+    {
+        return new ArrayList<FileStructure>(fileList);
+    }
+
+    public ArrayList<FolderStructure> getFolders()
+    {
+        return new ArrayList<FolderStructure>(subFolders);
+    }
     public void createFile(String name)
     {
         FileStructure newFile = new FileStructure(folderName + "/" + name);
