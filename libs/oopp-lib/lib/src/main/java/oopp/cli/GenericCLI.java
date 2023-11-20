@@ -9,6 +9,11 @@ public class GenericCLI {
     private ArrayList<CLIOption> options;
     private String CLIName;
 
+    public GenericCLI()
+    {
+        this("");
+    }
+
     public GenericCLI(String CLIName)
     {
         this(CLIName, new ArrayList<CLIOption>());
@@ -23,6 +28,12 @@ public class GenericCLI {
     public void addCliOption(CLIOption option)
     {
         options.add(option);
+    }
+
+    public void run(String name)
+    {
+        CLIName = name;
+        run();
     }
 
     public void run()

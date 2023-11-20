@@ -64,6 +64,7 @@ public class FileServer extends Server {
         super.start();
         sendDiscoveryRequest();
         System.out.printf("File server started on port %d.\n", this.httpServer.getAddress().getPort());
+        cli.run(name);
     }
 
     @Override

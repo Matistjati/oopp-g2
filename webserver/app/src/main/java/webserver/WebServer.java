@@ -25,6 +25,7 @@ public class WebServer extends Server {
     public void start() {
         super.start();
         System.out.printf("Web server started on port %d.\n", this.httpServer.getAddress().getPort());
+        cli.run("Web server");
     }
 
     @Override
