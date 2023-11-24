@@ -1,14 +1,12 @@
 package oopp.server;
 
 import com.sun.net.httpserver.HttpServer;
-import oopp.client.Client;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public abstract class Server {
     protected final HttpServer backingServer;
-    protected final Client client = new Client();
 
     protected Server(HttpServer backingServer) {
         this.backingServer = backingServer;

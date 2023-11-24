@@ -2,24 +2,24 @@ package fileserver;
 
 import oopp.cli.Cli;
 import oopp.cli.command.Command;
+import oopp.client.Client;
 import oopp.routing.Router;
 import oopp.server.Server;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.List;
 
 
 public class FileServer extends Server {
+    private final Client client;
     private final String name;
-    private final InetSocketAddress webSocketAddress;
     private boolean connected = false;
     private final Cli cli = new Cli(this);
 
     public FileServer(FileServerConfig config) throws IOException {
         super(config.socketAddress());
         this.name = config.name();
-        this.webSocketAddress = config.webSocketAddress();
+        this.client = new Client(config.webSocketAddress());
         Router router = new Router(List.of(
 
         ));
