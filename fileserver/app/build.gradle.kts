@@ -26,6 +26,7 @@ dependencies {
     implementation("com.google.guava:guava:32.1.1-jre")
     implementation(files("../../libs/oopp-lib/lib/build/libs/lib.jar"))
     implementation("org.ini4j:ini4j:0.5.4")
+    implementation("org.json:json:20231013")
 
 }
 
