@@ -1,0 +1,11 @@
+{
+  "name": "file server",
+  "socketAddress": {
+    "hostname": "localhost",
+    "port": 8080
+  },
+  "webSocketAddress": {
+    "hostname": "localhost",
+    "port": 8000
+  }
+}

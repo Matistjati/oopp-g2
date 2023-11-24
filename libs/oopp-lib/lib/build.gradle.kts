@@ -21,6 +21,7 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation("com.google.guava:guava:32.1.1-jre")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

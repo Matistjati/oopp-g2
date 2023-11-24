@@ -24,10 +24,9 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:32.1.1-jre")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
     implementation(files("../../libs/oopp-lib/lib/build/libs/lib.jar"))
-    implementation("org.ini4j:ini4j:0.5.4")
     implementation("org.json:json:20231013")
-
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

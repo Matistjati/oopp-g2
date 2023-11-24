@@ -6,14 +6,14 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 
 public abstract class Route implements HttpHandler {
-    final protected String path;
+    final protected String endpoint;
 
     public Route(String path) {
-        this.path = path;
+        this.endpoint = path;
     }
 
-    public String getPath() {
-        return path;
+    public String getEndpoint() {
+        return endpoint;
     }
 
     private void handleUnsupportedMethod(HttpExchange exchange) {

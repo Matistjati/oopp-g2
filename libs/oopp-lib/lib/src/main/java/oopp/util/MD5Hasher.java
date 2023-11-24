@@ -5,23 +5,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5Hasher {
-    public static String createHash(String input)
-    {
-        return createHash(input.getBytes(StandardCharsets.UTF_8));
-    }
-    public static String createHash(byte[] bytes)
-    {
-        String output = null;
-        try{
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            output = new String(digest.digest(bytes), StandardCharsets.UTF_8);
+    private static final MessageDigest digest;
+    static {
+        try {
+            digest = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
-        catch (NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-
-        return output;
     }
 
+    public static String createHash(byte[] bytes) {
+        return new String(digest.digest(bytes), StandardCharsets.UTF_8);
+    }
 }

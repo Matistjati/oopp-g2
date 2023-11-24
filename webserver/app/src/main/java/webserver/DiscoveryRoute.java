@@ -2,10 +2,9 @@ package webserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import oopp.routing.Route;
+import oopp.server.ServerInfo;
 
 import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
 
 public class DiscoveryRoute extends Route {
     final WebServer webServer;
@@ -17,9 +16,10 @@ public class DiscoveryRoute extends Route {
 
     @Override
     public void postRequest(HttpExchange exchange) {
+        final ServerInfo serverInfo;
         try {
             byte[] bytes = exchange.getRequestBody().readAllBytes();
-            // Deserialize bytes as ServerInfo.
+            serverInfo = ServerInfo.ofByteArray(bytes);
             exchange.sendResponseHeaders(200, 0);
             exchange.close();
         }
@@ -27,6 +27,7 @@ public class DiscoveryRoute extends Route {
             e.printStackTrace();
             return;
         }
-        // Register the file server to the file server registry.
+
+        webServer.registerFileServer(serverInfo);
     }
 }

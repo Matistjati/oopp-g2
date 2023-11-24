@@ -13,7 +13,7 @@ public class Router {
 
     public void mount(final HttpServer server) {
         for (final Route route : this.routes) {
-            server.createContext(route.getPath(), route);
+            server.createContext(route.getEndpoint(), route);
         }
     }
 }

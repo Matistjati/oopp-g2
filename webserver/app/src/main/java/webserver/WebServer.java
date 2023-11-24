@@ -6,6 +6,7 @@ import java.util.*;
 
 import oopp.routing.Router;
 import oopp.server.Server;
+import oopp.server.ServerInfo;
 
 public class WebServer extends Server {
     private final FileServerRegistry fileServerRegistry;
@@ -35,6 +36,6 @@ public class WebServer extends Server {
     }
 
     public void registerFileServer(ServerInfo serverInfo) {
-        // TODO: implement
+        fileServerRegistry.register(serverInfo);
     }
 }

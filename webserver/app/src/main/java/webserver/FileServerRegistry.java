@@ -1,12 +1,18 @@
 package webserver;
 
-import java.util.HashMap;
+import oopp.server.ServerInfo;
+
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FileServerRegistry {
-    private final Map<String, ServerInfo> registered;
+    private final Map<String, ServerInfo> registered = new ConcurrentHashMap<>();
 
     public FileServerRegistry() {
-        this.registered = new HashMap<>();
+
+    }
+
+    public void register(ServerInfo serverInfo) {
+        registered.put(serverInfo.getNameIdentifier(), serverInfo);
     }
 }
