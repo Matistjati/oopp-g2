@@ -15,7 +15,7 @@ public class InetSocketAddressDeserializer extends StdDeserializer<InetSocketAdd
     }
 
     @Override
-    public InetSocketAddress deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public InetSocketAddress deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonNode node = p.getCodec().readTree(p);
         return new InetSocketAddress(
                 node.get("hostname").textValue(),
