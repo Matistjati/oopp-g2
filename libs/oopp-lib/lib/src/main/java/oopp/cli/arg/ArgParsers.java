@@ -1,6 +1,6 @@
-package oopp.cli.argument;
+package oopp.cli.arg;
 
-import oopp.cli.argument.impl.ProxyArgParser;
+import oopp.cli.arg.impl.ProxyArgParser;
 
 import java.util.List;
 

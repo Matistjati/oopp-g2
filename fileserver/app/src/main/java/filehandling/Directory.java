@@ -1,4 +1,4 @@
-package FileHandler;
+package filehandling;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

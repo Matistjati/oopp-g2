@@ -1,4 +1,4 @@
-package oopp.cli.argument;
+package oopp.cli.arg;
 
 public abstract class ArgParser<T> {
     public final Class<T> type;

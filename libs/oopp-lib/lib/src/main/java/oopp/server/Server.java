@@ -1,12 +1,13 @@
 package oopp.server;
 
 import com.sun.net.httpserver.HttpServer;
+import oopp.route.Router;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public abstract class Server {
-    protected final HttpServer backingServer;
+    private final HttpServer backingServer;
 
     protected Server(HttpServer backingServer) {
         this.backingServer = backingServer;
@@ -28,5 +29,13 @@ public abstract class Server {
         HttpServer httpServer = HttpServer.create(socketAddress, 0);
         httpServer.setExecutor(null);
         return httpServer;
+    }
+
+    public InetSocketAddress getAddress() {
+        return this.backingServer.getAddress();
+    }
+
+    public void mount(Router router) {
+        router.mount(this.backingServer);
     }
 }

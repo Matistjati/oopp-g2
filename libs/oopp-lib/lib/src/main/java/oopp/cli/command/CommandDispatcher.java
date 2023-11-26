@@ -1,7 +1,7 @@
 package oopp.cli.command;
 
-import oopp.cli.argument.ArgParser;
-import oopp.cli.argument.ArgParsers;
+import oopp.cli.arg.ArgParser;
+import oopp.cli.arg.ArgParsers;
 
 import java.util.Arrays;
 import java.util.Map;

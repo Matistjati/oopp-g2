@@ -1,6 +1,6 @@
-package oopp.cli.argument.impl;
+package oopp.cli.arg.impl;
 
-import oopp.cli.argument.ArgParser;
+import oopp.cli.arg.ArgParser;
 
 import java.util.function.Function;
 

@@ -1,4 +1,4 @@
-package FileHandler;
+package filehandling;
 
 import java.io.File;
 

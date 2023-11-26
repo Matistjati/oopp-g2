@@ -1,6 +1,6 @@
 package oopp.cli.command;
 
-import oopp.cli.argument.ArgumentSpec;
+import oopp.cli.arg.ArgumentSpec;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

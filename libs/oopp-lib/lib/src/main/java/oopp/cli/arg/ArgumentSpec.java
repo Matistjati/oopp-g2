@@ -1,4 +1,4 @@
-package oopp.cli.argument;
+package oopp.cli.arg;
 
 public final class ArgumentSpec {
     public final String name;

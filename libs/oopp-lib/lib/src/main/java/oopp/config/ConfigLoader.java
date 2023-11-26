@@ -1,16 +1,11 @@
-package oopp.server.config;
+package oopp.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import oopp.serialize.InetSocketAddressDeserializer;
-import oopp.serialize.InetSocketAddressSerializer;
 import oopp.serialize.Jackson;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetSocketAddress;
 import java.nio.file.Path;
 
 public final class ConfigLoader {

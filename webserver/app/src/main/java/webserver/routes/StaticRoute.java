@@ -1,54 +1,44 @@
-package webserver;
+package webserver.routes;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import oopp.routing.Route;
-import oopp.util.FileTypeResolver;
+import oopp.route.Route;
+import oopp.serialize.Jackson;
+import webserver.FileTypeResolver;
 
 public class StaticRoute extends Route {
     final Path defaultHtmlPath;
 
     public StaticRoute(final Path defaultHtmlPath) {
-        super("/");
+        super("/", Jackson.OBJECT_MAPPER);
         this.defaultHtmlPath = defaultHtmlPath;
     }
 
     @Override
-    protected void getRequest(final HttpExchange exchange) {
+    protected void get(final HttpExchange exchange) {
         String requestURI = exchange.getRequestURI().getPath().substring(1);
         Path filePath = this.defaultHtmlPath.resolve(
                 requestURI.isBlank() ? "index.html" : requestURI
         );
         if (!Files.exists(filePath) || Files.isDirectory(filePath)) {
-            sendErrorResponse(exchange, 404);
+            throw new RuntimeException(String.format("File does not exist: %s.", filePath));
         }
         String contentType = FileTypeResolver.resolveFileType(filePath);
-
-        // debug
-
         if (contentType.equals("application/octet-stream")) {
             System.out.printf("DEBUG: %s has an unresolvable file type.\n", requestURI);
         }
-
-        // debug
-
+        exchange.getResponseHeaders().set("Content-Type", contentType);
         try {
-            byte[] fileBytes = Files.readAllBytes(filePath); // Throw IOException.
-            exchange.getResponseHeaders().set("Content-Type", contentType);
-            exchange.sendResponseHeaders(200, fileBytes.length); // Throws IOException.
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(fileBytes); // Throws IOException.
-            }
-            exchange.close();
+            this.serializeAndWrite(exchange, 200, Files.readAllBytes(filePath));
         }
         catch (IOException e) {
-            e.printStackTrace();
-            sendErrorResponse(exchange, 500);
+            throw new RuntimeException(e);
         }
     }
 }

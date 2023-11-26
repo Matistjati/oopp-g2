@@ -12,7 +12,7 @@ public class FileServerRegistry {
 
     }
 
-    public void register(ServerInfo serverInfo) {
+    /*public void register(ServerInfo serverInfo) {
         registered.put(serverInfo.getNameIdentifier(), serverInfo);
-    }
+    }*/
 }

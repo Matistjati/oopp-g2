@@ -1,41 +1,39 @@
 package webserver;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.util.*;
 
-import oopp.routing.Router;
+import oopp.cli.Cli;
+import oopp.cli.command.Command;
+import oopp.route.Router;
 import oopp.server.Server;
-import oopp.server.ServerInfo;
+import webserver.routes.StaticRoute;
 
 public class WebServer extends Server {
-    private final FileServerRegistry fileServerRegistry;
+    private final Cli cli = new Cli(this);
 
-    WebServer(String path, int port) throws IOException {
-        super(port);
-        fileServerRegistry = new FileServerRegistry();
+    public WebServer(WebServerConfig config) throws IOException {
+        super(config.socketAddress());
         Router router = new Router(List.of(
-                new DiscoveryRoute(this),
-                new StaticRoute(Path.of("./web/")),
-                new FileListRoute()
+                new StaticRoute(Path.of("./web/"))
         ));
-        router.mount(this.httpServer);
+        this.mount(router);
     }
 
     @Override
     public void start() {
         super.start();
-        System.out.printf("Web server started on port %d.\n", this.httpServer.getAddress().getPort());
-        cli.run("Web server");
+        System.out.printf("Web server started on port %d.\n", this.getAddress().getPort());
+        cli.start();
     }
 
+    @Command
     @Override
     public void stop() {
         super.stop();
-        System.out.printf("Web server stopped on port %d.\n", this.httpServer.getAddress().getPort());
-    }
-
-    public void registerFileServer(ServerInfo serverInfo) {
-        fileServerRegistry.register(serverInfo);
+        cli.stop();
+        System.out.printf("Web server stopped on port %d.\n", this.getAddress().getPort());
     }
 }

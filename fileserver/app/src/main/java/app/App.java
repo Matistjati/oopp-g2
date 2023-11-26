@@ -1,6 +1,8 @@
-package fileserver;
+package app;
 
-import oopp.server.config.ConfigLoader;
+import fileserver.FileServer;
+import fileserver.FileServerConfig;
+import oopp.config.ConfigLoader;
 
 import java.io.IOException;
 import java.nio.file.Path;
