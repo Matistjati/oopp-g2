@@ -6,11 +6,16 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("SameParameterValue")
 public abstract class Route implements HttpHandler {
-    final protected String endpoint;
-    final protected ObjectMapper objectMapper;
+    final private String endpoint;
+    final private ObjectMapper objectMapper;
+    final private Map<String, Route> subRoutes = new HashMap<>();
 
     public Route(String endpoint, ObjectMapper objectMapper) {
         this.endpoint = endpoint;

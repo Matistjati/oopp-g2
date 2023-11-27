@@ -8,7 +8,7 @@ import oopp.cli.Cli;
 import oopp.cli.command.Command;
 import oopp.route.Router;
 import oopp.server.Server;
-import webserver.routes.FileServerRoute;
+import webserver.routes.FileServersRoute;
 import webserver.routes.StaticRoute;
 
 public class WebServer extends Server {
@@ -19,7 +19,7 @@ public class WebServer extends Server {
         super(config.socketAddress());
         Router router = new Router(
                 new StaticRoute(Path.of("./web/")),
-                new FileServerRoute(this)
+                new FileServersRoute(this)
         );
         this.mount(router);
     }

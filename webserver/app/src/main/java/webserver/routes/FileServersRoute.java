@@ -7,11 +7,11 @@ import webserver.WebServer;
 
 import java.net.InetSocketAddress;
 
-public class FileServerRoute extends Route {
+public class FileServersRoute extends Route {
     private final WebServer webServer;
 
-    public FileServerRoute(WebServer webServer) {
-        super("/api/fileServer", Jackson.OBJECT_MAPPER);
+    public FileServersRoute(WebServer webServer) {
+        super("/api/fileServers", Jackson.OBJECT_MAPPER);
         this.webServer = webServer;
     }
 
@@ -25,5 +25,11 @@ public class FileServerRoute extends Route {
         else {
             this.serializeAndWrite(exchange, 409, String.format("name \"%s\" is already in use", name));
         }
+    }
+
+    @Override
+    protected void delete(HttpExchange exchange) {
+        System.out.println("in delete");
+        this.sendEmptyResponse(exchange, 200);
     }
 }

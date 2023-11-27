@@ -40,8 +40,8 @@ public class FileServer extends Server {
 
     @Command
     private void connect() {
-        client.newRequest("/api/fileServer")
-                .post(name)
+        client.newRequest("/api/fileServers")
+                .post(this.name)
                 .send()
                 .handle(() -> {
                     System.out.println("Successfully connected to web server.");
@@ -49,11 +49,30 @@ public class FileServer extends Server {
                 }, 200)
                 .handle(String.class, msg -> {
                     System.out.printf("ERROR: Could not connect to web server: %s\n", msg);
-                }, 409);
+                }, 409)
+                .handle((() -> {
+                    throw new RuntimeException();
+                }));
     }
 
     @Command
     private void disconnect() {
-
+        if (!this.connected) {
+            System.out.println("ERROR: Not connected to web server.");
+            return;
+        }
+        client.newRequest("/api/fileServers" + this.name)
+                .delete()
+                .send()
+                .handle(() -> {
+                    System.out.println("Successfully disconnected from web server.");
+                    this.connected = false;
+                }, 200)
+                .handle(String.class, msg -> {
+                    System.out.printf("ERROR: Could not disconnect from web server: %s\n", msg);
+                }, 409)
+                .handle(() -> {
+                    throw new RuntimeException();
+                });
     }
 }
