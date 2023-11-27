@@ -4,6 +4,7 @@ import oopp.server.ServerInfo;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,6 +13,10 @@ public class FileServerRegistry {
 
     public FileServerRegistry() {
 
+    }
+
+    public synchronized List<String> getFileServerNameList() {
+        return registered.keySet().stream().sorted().toList();
     }
 
     public synchronized boolean register(ServerInfo serverInfo) {
@@ -27,9 +32,13 @@ public class FileServerRegistry {
     public synchronized void unregister(String name) {
         final SocketAddress socketAddress = registered.remove(name);
         if (socketAddress != null) {
-            System.out.printf("Successfully unregistered file server on %s with name %s\n.", socketAddress, name);
+            System.out.printf("Successfully unregistered file server on %s with name \"%s\"\n.", socketAddress, name);
             return;
         }
         System.out.printf("Client tried to unregister from unregistered name: \"%s\"\n", name);
+    }
+
+    public synchronized void disconnectAllClients() {
+
     }
 }

@@ -4,23 +4,24 @@ import com.sun.net.httpserver.HttpExchange;
 import oopp.route.Route;
 import oopp.serialize.Jackson;
 import oopp.server.ServerInfo;
+import webserver.FileServerRegistry;
 import webserver.WebServer;
 
 import java.net.InetSocketAddress;
 
 public class FileServersRoute extends Route {
-    private final WebServer webServer;
+    private final FileServerRegistry fileServerRegistry;
 
-    public FileServersRoute(WebServer webServer) {
+    public FileServersRoute(FileServerRegistry fileServerRegistry) {
         super("/api/fileServers", Jackson.OBJECT_MAPPER);
-        this.webServer = webServer;
+        this.fileServerRegistry = fileServerRegistry;
     }
 
     @Override
     protected void post(HttpExchange exchange) {
         final ServerInfo serverInfo = this.readAndDeserialize(exchange, ServerInfo.class);
         final InetSocketAddress socketAddress = exchange.getRemoteAddress();
-        if (webServer.registerFileServer(serverInfo)) {
+        if (fileServerRegistry.register(serverInfo)) {
             this.sendEmptyResponse(exchange, 200);
         }
         else {
@@ -31,7 +32,12 @@ public class FileServersRoute extends Route {
     @Override
     protected void delete(HttpExchange exchange) {
         final String name = this.stripUri(exchange.getRequestURI());
-        webServer.unregisterFileServer(name);
+        fileServerRegistry.unregister(name);
         this.sendEmptyResponse(exchange, 200);
+    }
+
+    @Override
+    protected void get(HttpExchange exchange) {
+        this.serializeAndWrite(exchange, 200, this.fileServerRegistry.getFileServerNameList());
     }
 }

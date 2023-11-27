@@ -1,12 +1,16 @@
-function fetchFileList() {
-    fetch('/api/fileList')
-    .then(response => response.json())
-    .then(data => {
-        // Handle data
+async function fetchFileServerList() : Promise<Array<String>> {
+    return fetch('/api/fileServers', {
+        method: "GET"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error();
+        }
+        return response.json();
     })
     .catch(error => {
-        // Handle error
-    });
+        throw error;
+    })
 }
 
-export {fetchFileList};
+export {fetchFileServerList};

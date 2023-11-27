@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './FileViewer.css'
-import FileRow from '../FileRow/FileRow';
+import FileRow from './FileRow/FileRow';
 
 function FileViewer() {
     const fileRows = [];

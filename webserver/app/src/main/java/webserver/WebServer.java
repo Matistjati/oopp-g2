@@ -3,6 +3,7 @@ package webserver;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
+import java.util.List;
 
 import oopp.cli.Cli;
 import oopp.cli.command.Command;
@@ -20,7 +21,7 @@ public class WebServer extends Server {
         super(config.socketAddress());
         Router router = new Router(
                 new StaticRoute(Path.of("./web/")),
-                new FileServersRoute(this)
+                new FileServersRoute(this.fileServerRegistry)
         );
         this.mount(router);
     }
@@ -38,13 +39,5 @@ public class WebServer extends Server {
         super.stop();
         cli.stop();
         System.out.printf("Web server stopped on port %d.\n", this.getAddress().getPort());
-    }
-
-    public boolean registerFileServer(ServerInfo serverInfo) {
-        return this.fileServerRegistry.register(serverInfo);
-    }
-
-    public void unregisterFileServer(String name) {
-        this.fileServerRegistry.unregister(name);
     }
 }
