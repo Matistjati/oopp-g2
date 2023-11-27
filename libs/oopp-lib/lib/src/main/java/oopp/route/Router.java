@@ -2,13 +2,14 @@ package oopp.route;
 
 import com.sun.net.httpserver.HttpServer;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Router {
     private final List<Route> routes;
 
-    public Router(final List<Route> routes) {
-        this.routes = routes;
+    public Router(Route... routes) {
+        this.routes = Arrays.asList(routes);
     }
 
     public void mount(final HttpServer server) {

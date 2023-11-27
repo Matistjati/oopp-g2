@@ -65,6 +65,15 @@ public abstract class Route implements HttpHandler {
         }
     }
 
+    protected void sendEmptyResponse(HttpExchange exchange, int rCode) {
+        try {
+            exchange.sendResponseHeaders(rCode, -1);
+        }
+        catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected void serializeAndWrite(HttpExchange exchange, int rCode, byte[] bytes) {
         try {
             exchange.sendResponseHeaders(rCode, bytes.length);

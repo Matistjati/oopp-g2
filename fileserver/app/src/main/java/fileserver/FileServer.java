@@ -7,22 +7,19 @@ import oopp.serialize.Jackson;
 import oopp.server.Server;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
-import java.util.List;
 
 
 public class FileServer extends Server {
-    private final FileServerClient client = new FileServerClient(Jackson.OBJECT_MAPPER);
+    private final FileServerClient client;
     private final Cli cli = new Cli(this);
     private final String name;
     private boolean connected = false;
 
     public FileServer(FileServerConfig config) throws IOException {
         super(config.socketAddress());
+        this.client = new FileServerClient(Jackson.OBJECT_MAPPER, config.webSocketAddress());
         this.name = config.name();
-        Router router = new Router(List.of(
-
-        ));
+        Router router = new Router();
         this.mount(router);
     }
 
@@ -43,7 +40,16 @@ public class FileServer extends Server {
 
     @Command
     private void connect() {
-        
+        client.newRequest("/api/fileServer")
+                .post(name)
+                .send()
+                .handle(() -> {
+                    System.out.println("Successfully connected to web server.");
+                    this.connected = true;
+                }, 200)
+                .handle(String.class, msg -> {
+                    System.out.printf("ERROR: Could not connect to web server: %s\n", msg);
+                }, 409);
     }
 
     @Command

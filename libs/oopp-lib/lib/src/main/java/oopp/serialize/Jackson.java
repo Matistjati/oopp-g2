@@ -3,6 +3,7 @@ package oopp.serialize;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class Jackson {

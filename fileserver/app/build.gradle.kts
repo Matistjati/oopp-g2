@@ -38,5 +38,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("fileserver.App")
+    mainClass.set("app.App")
 }

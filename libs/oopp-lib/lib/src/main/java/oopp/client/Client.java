@@ -1,6 +1,5 @@
 package oopp.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import oopp.serialize.DeserializingBodyHandler;
 import oopp.serialize.SerializingBodyPublisher;
@@ -22,20 +21,20 @@ public class Client {
         this.objectMapper = objectMapper;
     }
 
-    public <T> RequestBuilder<T> newRequest(InetSocketAddress socketAddress, final String endpoint, final Class<T> responseType) {
-        return new RequestBuilder<>(this, socketAddress, endpoint, responseType);
+    public RequestBuilder newRequest(InetSocketAddress socketAddress, final String endpoint) {
+        return new RequestBuilder(this, socketAddress, endpoint);
     }
 
-    private <T> HttpResponse<T> send(final HttpRequest request, final Class<T> responseType) throws IOException, InterruptedException {
-        if (responseType == byte[].class) {
-            //noinspection unchecked
-            return (HttpResponse<T>) backingClient.send(request, BodyHandlers.ofByteArray());
-        } else if (responseType == Void.class) {
-            //noinspection unchecked
-            return (HttpResponse<T>) backingClient.send(request, BodyHandlers.discarding());
+    private FluidResponse send(final HttpRequest request) {
+        try {
+            final HttpResponse<byte[]> response = backingClient.send(request, BodyHandlers.ofByteArray());
+            return new FluidResponse(this.objectMapper, response);
         }
-        return backingClient.send(request, new DeserializingBodyHandler<>(objectMapper, responseType));
+        catch(IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
+
     private URI createUri(InetSocketAddress socketAddress, final String endpoint) {
         try {
             return new URI("http", null, socketAddress.getHostName(), socketAddress.getPort(), endpoint, null, null);
@@ -45,39 +44,37 @@ public class Client {
         }
     }
 
-    public static final class RequestBuilder<T> {
+    public static final class RequestBuilder {
         private final Client client;
-        private final Class<T> responseType;
         private final HttpRequest.Builder delegate = HttpRequest.newBuilder();
 
-        private RequestBuilder(final Client client, InetSocketAddress socketAddress, final String endpoint, final Class<T> responseType) {
+        private RequestBuilder(final Client client, InetSocketAddress socketAddress, final String endpoint) {
             this.client = client;
-            this.responseType = responseType;
             delegate.uri(client.createUri(socketAddress, endpoint));
         }
 
-        public RequestBuilder<T> post(Object object) {
+        public RequestBuilder post(Object object) {
             delegate.POST(new SerializingBodyPublisher(client.objectMapper, object));
             return this;
         }
 
-        public RequestBuilder<T> put(Object object) {
+        public RequestBuilder put(Object object) {
             delegate.PUT(new SerializingBodyPublisher(client.objectMapper, object));
             return this;
         }
 
-        public RequestBuilder<T> get() {
+        public RequestBuilder get() {
             delegate.GET();
             return this;
         }
 
-        public RequestBuilder<T> delete() {
+        public RequestBuilder delete() {
             delegate.DELETE();
             return this;
         }
 
-        public HttpResponse<T> send() throws IOException, InterruptedException {
-            return client.send(delegate.build(), responseType);
+        public FluidResponse send() {
+            return client.send(delegate.build());
         }
     }
 }

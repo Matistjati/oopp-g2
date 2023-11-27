@@ -9,18 +9,18 @@ import java.net.http.HttpResponse.BodySubscribers;
 
 public final class DeserializingBodyHandler<T> implements HttpResponse.BodyHandler<T> {
     private final ObjectMapper objectMapper;
-    private final Class<T> responseType;
+    private final Class<T> dtoClass;
 
-    public DeserializingBodyHandler(final ObjectMapper objectMapper, final Class<T> responseType) {
+    public DeserializingBodyHandler(final ObjectMapper objectMapper, final Class<T> dtoClass) {
         this.objectMapper = objectMapper;
-        this.responseType = responseType;
+        this.dtoClass = dtoClass;
     }
 
     @Override
     public HttpResponse.BodySubscriber<T> apply(final ResponseInfo responseInfo) {
         return BodySubscribers.mapping(BodySubscribers.ofInputStream(), upstream -> {
             try {
-                return objectMapper.readValue(upstream, responseType);
+                return objectMapper.readValue(upstream, dtoClass);
             } catch (final IOException exception) {
                 throw new RuntimeException(exception);
             }

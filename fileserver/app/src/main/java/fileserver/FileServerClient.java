@@ -6,13 +6,14 @@ import oopp.client.Client;
 import java.net.InetSocketAddress;
 
 public class FileServerClient extends Client {
-    private InetSocketAddress webServerSocketAddress;
+    private final InetSocketAddress webSocketAddress;
 
-    public FileServerClient(ObjectMapper objectMapper) {
+    public FileServerClient(ObjectMapper objectMapper, InetSocketAddress webSocketAddress) {
         super(objectMapper);
+        this.webSocketAddress = webSocketAddress;
     }
 
-    public <T> RequestBuilder<T> newRequest(final String endpoint, final Class<T> responseType) {
-        return this.newRequest(this.webServerSocketAddress, endpoint, responseType);
+    public RequestBuilder newRequest(final String endpoint) {
+        return this.newRequest(this.webSocketAddress, endpoint);
     }
 }
