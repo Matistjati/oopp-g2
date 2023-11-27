@@ -8,6 +8,7 @@ import oopp.cli.Cli;
 import oopp.cli.command.Command;
 import oopp.route.Router;
 import oopp.server.Server;
+import oopp.server.ServerInfo;
 import webserver.routes.FileServersRoute;
 import webserver.routes.StaticRoute;
 
@@ -39,7 +40,11 @@ public class WebServer extends Server {
         System.out.printf("Web server stopped on port %d.\n", this.getAddress().getPort());
     }
 
-    public boolean registerFileServer(String name, InetSocketAddress inetSocketAddress) {
-        return this.fileServerRegistry.register(name, inetSocketAddress);
+    public boolean registerFileServer(ServerInfo serverInfo) {
+        return this.fileServerRegistry.register(serverInfo);
+    }
+
+    public void unregisterFileServer(String name) {
+        this.fileServerRegistry.unregister(name);
     }
 }

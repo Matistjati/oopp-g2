@@ -5,6 +5,7 @@ import oopp.cli.command.Command;
 import oopp.route.Router;
 import oopp.serialize.Jackson;
 import oopp.server.Server;
+import oopp.server.ServerInfo;
 
 import java.io.IOException;
 
@@ -40,8 +41,12 @@ public class FileServer extends Server {
 
     @Command
     private void connect() {
+        if (this.connected) {
+            System.out.println("ERROR: Already connected to web server.");
+            return;
+        }
         client.newRequest("/api/fileServers")
-                .post(this.name)
+                .post(new ServerInfo(this.name, this.getAddress()))
                 .send()
                 .handle(() -> {
                     System.out.println("Successfully connected to web server.");

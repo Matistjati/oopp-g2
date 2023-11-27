@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,5 +99,9 @@ public abstract class Route implements HttpHandler {
         catch(IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected String stripUri(URI uri) {
+        return uri.getPath().substring(this.endpoint.length());
     }
 }
