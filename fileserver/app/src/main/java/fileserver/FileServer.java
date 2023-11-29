@@ -6,6 +6,8 @@ import oopp.route.Router;
 import oopp.serialize.Jackson;
 import oopp.server.Server;
 import oopp.server.ServerInfo;
+import oopp.server.FileInfo;
+
 
 import java.io.IOException;
 
@@ -57,6 +59,26 @@ public class FileServer extends Server {
                 }, 409)
                 .handle((() -> {
                     throw new RuntimeException();
+                }));
+    }
+
+    @Command
+    private void sendfile() {
+        System.out.println("Sending file to web server.");
+
+        client.newRequest("/api/filelist")
+                .post(new FileInfo(this.name, "100mb", "today"))
+                .send()
+                .handle(() -> {
+                    System.out.println("Successfully Sent file.");
+                }, 200)
+                .handle(String.class, msg -> {
+                    System.out.printf("ERROR: Could not connect to web server: %s\n", msg);
+                }, 409)
+                .handle((() -> {
+                    // Print the stack trace of the exception.
+                    //throw new RuntimeException();
+
                 }));
     }
 

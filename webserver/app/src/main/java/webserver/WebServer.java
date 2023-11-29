@@ -11,6 +11,7 @@ import oopp.route.Router;
 import oopp.server.Server;
 import oopp.server.ServerInfo;
 import webserver.routes.FileServersRoute;
+import webserver.routes.FileListRoute;
 import webserver.routes.StaticRoute;
 
 public class WebServer extends Server {
@@ -21,7 +22,8 @@ public class WebServer extends Server {
         super(config.socketAddress());
         Router router = new Router(
                 new StaticRoute(Path.of("./web/")),
-                new FileServersRoute(this.fileServerRegistry)
+                new FileServersRoute(this.fileServerRegistry),
+                new FileListRoute()
         );
         this.mount(router);
     }
