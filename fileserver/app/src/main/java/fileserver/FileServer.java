@@ -7,7 +7,7 @@ import oopp.serialize.Jackson;
 import oopp.server.Server;
 import oopp.server.ServerInfo;
 import oopp.server.FileInfo;
-
+import routes.UploadFileRoute;
 
 import java.io.IOException;
 
@@ -22,7 +22,9 @@ public class FileServer extends Server {
         super(config.socketAddress());
         this.client = new FileServerClient(Jackson.OBJECT_MAPPER, config.webSocketAddress());
         this.name = config.name();
-        Router router = new Router();
+        Router router = new Router(
+                new UploadFileRoute()
+        );
         this.mount(router);
     }
 

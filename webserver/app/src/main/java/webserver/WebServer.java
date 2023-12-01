@@ -13,6 +13,7 @@ import oopp.server.ServerInfo;
 import webserver.routes.FileServersRoute;
 import webserver.routes.FileListRoute;
 import webserver.routes.StaticRoute;
+import webserver.routes.UploadFileRoute;
 
 public class WebServer extends Server {
     private final Cli cli = new Cli(this);
@@ -23,7 +24,8 @@ public class WebServer extends Server {
         Router router = new Router(
                 new StaticRoute(Path.of("./web/")),
                 new FileServersRoute(this.fileServerRegistry),
-                new FileListRoute()
+                new FileListRoute(),
+                new UploadFileRoute(this.fileServerRegistry)
         );
         this.mount(router);
     }
