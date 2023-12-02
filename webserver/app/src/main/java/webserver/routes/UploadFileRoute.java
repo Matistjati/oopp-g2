@@ -32,27 +32,16 @@ public class UploadFileRoute extends SerializingRoute {
         // Print the header value
         System.out.println("id: " + id);
 
-
-
         //this.forwardFile(requestBody);
 
         exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*"); // Change * to your allowed origin
         exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, id"); // Add other headers if needed
-        exchange.getResponseHeaders().add("Content-Type", "application/json");
+        exchange.getResponseHeaders().add("Content-Type", "application/octet-stream");
         exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true");
 
-        try {
-            exchange.sendResponseHeaders(204, -1);
-            System.out.println("pong back");
-        }
-        catch (IOException e) {
-            e.printStackTrace(); // Handle or log the exception appropriately
-        }
-        finally {
-            exchange.close();
-        }
-
+        this.sendEmptyResponse(exchange, 200);
+        System.out.println("pong back");
     }
 
     protected void forwardFile(InputStream fileContent) {

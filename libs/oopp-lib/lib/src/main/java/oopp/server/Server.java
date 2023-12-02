@@ -21,9 +21,7 @@ public abstract class Server {
         this.backingServer.start();
     }
 
-    public void stop() {
-        backingServer.stop(0);
-    }
+    public void stop() { backingServer.stop(0); }
 
     private static HttpServer createDefault(InetSocketAddress socketAddress) throws IOException {
         HttpServer httpServer = HttpServer.create(socketAddress, 0);

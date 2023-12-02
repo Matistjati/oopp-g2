@@ -53,8 +53,13 @@ public abstract class Route implements HttpHandler {
             }
         }
         catch(Throwable e) {
+<<<<<<< HEAD
             Route.sendEmptyResponse(exchange, 200);
             e.printStackTrace();
+=======
+            System.out.println("allt sprängdes");
+            serializeAndWrite(exchange,500, e.getMessage());
+>>>>>>> bc34fed (Worked on file upload dashboard)
         }
         finally {
             exchange.close();
