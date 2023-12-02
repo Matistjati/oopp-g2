@@ -1,20 +1,20 @@
 import './FileRow.css'
 import NormalFileIcon from '../../../assets/svg/file-icon.svg'
 
-function FileRow({fileName, fileDate, fileSize}: any) {
+function FileRow({name, date, size}: any) {
     return (
         <tr className='file-row'>
             <td>
                 <img src={NormalFileIcon} alt='' />
             </td>
             <td className='file-name'>
-                {fileName}
+                {name}
             </td>
             <td className='file-date'>
-                {fileDate}
+                {date}
             </td>
             <td className='file-size'>
-                {fileSize}
+                {size}
             </td>
         </tr>
     )

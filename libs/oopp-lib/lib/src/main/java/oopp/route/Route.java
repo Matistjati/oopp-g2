@@ -102,6 +102,6 @@ public abstract class Route implements HttpHandler {
     }
 
     protected String stripUri(URI uri) {
-        return uri.getPath().substring(this.endpoint.length());
+        return uri.getPath().substring(this.endpoint.length() + 1);
     }
 }

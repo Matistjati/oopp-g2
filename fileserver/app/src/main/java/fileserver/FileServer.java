@@ -90,7 +90,7 @@ public class FileServer extends Server {
             System.out.println("ERROR: Not connected to web server.");
             return;
         }
-        client.newRequest("/api/fileServers" + this.name)
+        client.newRequest("/api/fileServers/" + this.name)
                 .delete()
                 .send()
                 .handle(() -> {

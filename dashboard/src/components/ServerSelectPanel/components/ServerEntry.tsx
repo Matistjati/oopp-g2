@@ -1,8 +1,8 @@
 import './ServerEntry.css'
 
-function ServerEntry({name}: any) {
+function ServerEntry({name, onClick}: any) {
     return(
-        <div className="server-entry padding-medium" style={{width: '100%'}}>{name}</div>
+        <button onClick={onClick} className="server-entry padding-medium" style={{width: '100%'}}>{name}</button>
     )
 }
 

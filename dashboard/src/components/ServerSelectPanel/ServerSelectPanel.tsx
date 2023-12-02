@@ -4,7 +4,7 @@ import { fetchFileServerList } from '../../lib/api';
 import ServerEntry from './components/ServerEntry';
 import Delimiter from '../Delimiter/Delimiter';
 
-function ServerSelectPanel() {
+function ServerSelectPanel({selectServer}: any) {
     const [serverList, setServerList] = useState<Array<String>>([]);
 
     useEffect(() => {
@@ -22,7 +22,9 @@ function ServerSelectPanel() {
     };
 
     const serverEntries = serverList.map(name => (
-        <ServerEntry name={name} />
+        <ServerEntry onClick={() => {
+            selectServer(name);
+        }} name={name} />
     ));
 
     return (

@@ -1,23 +1,20 @@
-async function fetchFileServerList() : Promise<Array<String>> {
+async function fetchFileServerList(): Promise<Array<String>> {
     return fetch('/api/fileServers', {
         method: "GET"
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error();
-        }
-        return response.json();
-    })
-    .catch(error => {
-        throw error;
-    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error();
+            }
+            return response.json();
+        })
+        .catch(error => {
+            throw error;
+        })
 }
 
-export {fetchFileServerList};
-
-
-async function fetchFilelist() : Promise<Array<String>> {
-    return fetch('/api/filelist', {
+async function fetchFileList(fileServerName: string, directory: Array<string>): Promise<Array<IFile>> {
+    return fetch(`/api/filelist/${fileServerName}/${directory.join('/')}`, {
         method: "GET"
     })
         .then(response => {
@@ -32,4 +29,4 @@ async function fetchFilelist() : Promise<Array<String>> {
         })
 }
 
-export {fetchFilelist};
+export { fetchFileServerList, fetchFileList };

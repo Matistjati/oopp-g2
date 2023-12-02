@@ -1,17 +1,20 @@
 import {useEffect, useState} from 'react';
 import './FileViewer.css'
 import RefreshButton from '../RefreshButton/RefreshButton';
-import {fetchFilelist} from '../../lib/api';
+import {fetchFileList} from '../../lib/api';
 import FileRow from './FileRow/FileRow';
 
-function FileViewer() {
-    const [fileList, setFileList] = useState<Array<String>>([]);
+function FileViewer(props: {selectedServer: string, currentDirectory: Array<string>}) {
+    const [fileList, setFileList] = useState<Array<IFile>>([]);
     useEffect(() => {
         handleRefresh()
     }, []);
 
     const handleRefresh = () => {
-        fetchFilelist()
+        if (props.selectedServer == '') {
+            return;
+        }
+        fetchFileList(props.selectedServer, props.currentDirectory)
             .then(serverList => {
                 setFileList(serverList);
             })
@@ -20,19 +23,18 @@ function FileViewer() {
             });
     };
 
-    const fileEntries = fileList.map((name) => (
-        <FileRow fileName={name.split(" ")[0]} fileDate={name.split(" ")[1]} fileSize={name.split(" ")[2]} />
+    const fileEntries = fileList.map((file) => (
+        <FileRow name={file.name} date={file.date} size={file.size} />
     ));
 
-
     return (
-        <table style={{width: '100%'}}>
-            <tr><td></td><td>Name</td><td>Date</td><td>Size</td>
-                <RefreshButton onClick={handleRefresh} />
-            </tr>
-
-            {fileEntries}
-        </table>
+        <div>
+            <RefreshButton onClick={handleRefresh} />
+            <table style={{ width: '100%' }}>
+                <tr><td></td><td>Name</td><td>Date</td><td>Size</td></tr>
+                {fileEntries}
+            </table>
+        </div>
     )
 }
 
