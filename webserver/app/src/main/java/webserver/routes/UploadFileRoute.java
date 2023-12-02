@@ -3,6 +3,7 @@ package webserver.routes;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.Headers;
 import oopp.route.Route;
+import oopp.route.SerializingRoute;
 import oopp.serialize.Jackson;
 import webserver.FileServerRegistry;
 
@@ -13,7 +14,7 @@ import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
-public class UploadFileRoute extends Route {
+public class UploadFileRoute extends SerializingRoute {
     private final FileServerRegistry fileServerRegistry;
 
     public UploadFileRoute(FileServerRegistry fileServerRegistry) {

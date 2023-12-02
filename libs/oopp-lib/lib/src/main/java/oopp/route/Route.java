@@ -15,12 +15,10 @@ import java.util.Map;
 @SuppressWarnings("SameParameterValue")
 public abstract class Route implements HttpHandler {
     final private String endpoint;
-    final private ObjectMapper objectMapper;
     final private Map<String, Route> subRoutes = new HashMap<>();
 
-    public Route(String endpoint, ObjectMapper objectMapper) {
+    public Route(String endpoint) {
         this.endpoint = endpoint;
-        this.objectMapper = objectMapper;
     }
 
     public String getEndpoint() {
@@ -55,7 +53,7 @@ public abstract class Route implements HttpHandler {
             }
         }
         catch(Throwable e) {
-            serializeAndWrite(exchange,500, e.getMessage());
+            Route.sendEmptyResponse(exchange, 200);
             e.printStackTrace();
         }
         finally {
@@ -63,39 +61,9 @@ public abstract class Route implements HttpHandler {
         }
     }
 
-    protected <T> T readAndDeserialize(HttpExchange exchange, Class<T> dtoType) {
-        try {
-            return this.objectMapper.readValue(exchange.getRequestBody().readAllBytes(), dtoType);
-        }
-        catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    protected void sendEmptyResponse(HttpExchange exchange, int rCode) {
+    protected static void sendEmptyResponse(HttpExchange exchange, int rCode) {
         try {
             exchange.sendResponseHeaders(rCode, -1);
-        }
-        catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    protected void serializeAndWrite(HttpExchange exchange, int rCode, byte[] bytes) {
-        try {
-            exchange.sendResponseHeaders(rCode, bytes.length);
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(bytes);
-            }
-        }
-        catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    protected void serializeAndWrite(HttpExchange exchange, int rCode, Object dto) {
-        try {
-            serializeAndWrite(exchange, rCode, this.objectMapper.writeValueAsBytes(dto));
         }
         catch(IOException e) {
             throw new RuntimeException(e);

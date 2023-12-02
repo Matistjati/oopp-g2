@@ -35,10 +35,9 @@ public abstract class ProxyRoute extends Route {
 
     protected ProxyRoute(
             String endpoint,
-            ObjectMapper objectMapper,
             FileServerRegistry fileServerRegistry
     ) {
-        super(endpoint, objectMapper);
+        super(endpoint);
         this.fileServerRegistry = fileServerRegistry;
     }
 
@@ -84,14 +83,14 @@ public abstract class ProxyRoute extends Route {
             final HttpRequest proxyRequest = requestBuilder.build();
             HttpResponse<byte[]> proxyResponse = client.send(proxyRequest, HttpResponse.BodyHandlers.ofByteArray());
             if (proxyResponse.body().length == 0) {
-                exchange.sendResponseHeaders(proxyResponse.statusCode(), -1);
+                Route.sendEmptyResponse(exchange, proxyResponse.statusCode());
                 return;
             }
             exchange.sendResponseHeaders(proxyResponse.statusCode(), proxyResponse.body().length);
             exchange.getResponseBody().write(proxyResponse.body());
         }
         catch(Throwable e) {
-            serializeAndWrite(exchange,500, e.getMessage());
+            Route.sendEmptyResponse(exchange, 500);
             e.printStackTrace();
         }
         finally {

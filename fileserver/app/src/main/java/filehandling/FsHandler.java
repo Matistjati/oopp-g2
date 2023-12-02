@@ -1,50 +1,35 @@
 package filehandling;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class FsHandler {
+    private final Path storageRoot;
     private final Map<Path, Lock> locks = new ConcurrentHashMap<>();
-    public FsHandler() {
 
-    }
-
-    public boolean acquire(Path path) {
-        File file = path.toFile();
-        if (!file.exists()) {
-            return false;
+    public FsHandler(Path storageRoot) {
+        this.storageRoot = storageRoot;
+        if (!storageRoot.toFile().exists()) {
+            try {
+                Files.createDirectories(storageRoot);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        this.lock(path);
-        List.of(file.listFiles()).forEach(subFile -> this.acquire(Path.of(subFile.getPath())));
-        return true;
     }
 
-    public synchronized void lock(Path path) {
-        final Lock fileLock = locks.get(path);
-        if (fileLock == null) {
-            Lock newFileLock = new ReentrantLock();
-            newFileLock.lock();
-            locks.put(path, newFileLock);
-            return;
+    public FsDirectoryList getFileList(Path path) {
+        final File dir = storageRoot.resolve(path).toFile();
+        if (!dir.exists()) {
+            throw new RuntimeException();
         }
-        fileLock.lock();
-    }
-
-    public void release() {
-
-    }
-
-    public FsList getFileList(Path path) {
-        return new FsList(path.toFile());
-    }
-
-    private abstract static class FsEntry{
-        private String name;
-
+        return new FsDirectoryList(dir);
     }
 }

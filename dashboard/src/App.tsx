@@ -14,7 +14,6 @@ function App() {
   const selectServer = (name: string) => {
       setSelectedServer(name);
       setCurrentDirectory([]);
-      console.log(name);
   }
 
   return (

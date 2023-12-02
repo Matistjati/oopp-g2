@@ -1,5 +1,6 @@
 package fileserver;
 
+import filehandling.FsHandler;
 import fileserver.routes.FileListRoute;
 import oopp.cli.Cli;
 import oopp.cli.command.Command;
@@ -11,9 +12,11 @@ import oopp.server.FileInfo;
 import routes.UploadFileRoute;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 
 public class FileServer extends Server {
+    private final FsHandler fsHandler = new FsHandler(Path.of("./storage"));
     private final FileServerClient client;
     private final Cli cli = new Cli(this);
     private final String name;
@@ -24,7 +27,7 @@ public class FileServer extends Server {
         this.client = new FileServerClient(Jackson.OBJECT_MAPPER, config.webSocketAddress());
         this.name = config.name();
         Router router = new Router(
-                new FileListRoute(),
+                new FileListRoute(this.fsHandler),
                 new UploadFileRoute()
         );
         this.mount(router);
@@ -63,26 +66,6 @@ public class FileServer extends Server {
                 }, 409)
                 .handle((() -> {
                     throw new RuntimeException();
-                }));
-    }
-
-    @Command
-    private void sendfile() {
-        System.out.println("Sending file to web server.");
-
-        client.newRequest("/api/filelist")
-                .post(new FileInfo(this.name, "100mb", "today"))
-                .send()
-                .handle(() -> {
-                    System.out.println("Successfully Sent file.");
-                }, 200)
-                .handle(String.class, msg -> {
-                    System.out.printf("ERROR: Could not connect to web server: %s\n", msg);
-                }, 409)
-                .handle((() -> {
-                    // Print the stack trace of the exception.
-                    //throw new RuntimeException();
-
                 }));
     }
 

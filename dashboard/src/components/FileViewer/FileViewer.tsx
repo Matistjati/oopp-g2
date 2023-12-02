@@ -5,7 +5,7 @@ import {fetchFileList} from '../../lib/api';
 import FileRow from './FileRow/FileRow';
 
 function FileViewer(props: {selectedServer: string, currentDirectory: Array<string>}) {
-    const [fileList, setFileList] = useState<Array<IFile>>([]);
+    const [fileList, setFileList] = useState<FsDirectoryList>({dirs: [], files: []});
 
     const handleRefresh = () => {
         if (props.selectedServer == '') {
@@ -20,7 +20,7 @@ function FileViewer(props: {selectedServer: string, currentDirectory: Array<stri
             });
     };
 
-    const fileEntries = fileList.map((file) => (
+    const fileEntries = fileList.dirs.concat(fileList.files).map((file) => (
         <FileRow name={file.name} date={file.date} size={file.size} />
     ));
 

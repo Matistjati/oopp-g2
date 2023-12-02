@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpHandler;
 import oopp.route.Route;
+import oopp.route.SerializingRoute;
 import oopp.serialize.Jackson;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
-public class UploadFileRoute extends Route {
+public class UploadFileRoute extends SerializingRoute {
 
     public UploadFileRoute() {
         super("/api/uploadfile", Jackson.OBJECT_MAPPER);

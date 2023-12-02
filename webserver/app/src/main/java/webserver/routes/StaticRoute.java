@@ -9,10 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import oopp.route.Route;
+import oopp.route.SerializingRoute;
 import oopp.serialize.Jackson;
 import webserver.FileTypeResolver;
 
-public class StaticRoute extends Route {
+public class StaticRoute extends SerializingRoute {
     final Path defaultHtmlPath;
 
     public StaticRoute(final Path defaultHtmlPath) {

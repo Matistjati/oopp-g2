@@ -11,6 +11,6 @@ import java.net.InetSocketAddress;
 
 public class FileListRoute extends ProxyRoute {
     public FileListRoute(FileServerRegistry fileServerRegistry) {
-        super("/api/fileList", Jackson.OBJECT_MAPPER, fileServerRegistry);
+        super("/api/fileList", fileServerRegistry);
     }
 }
