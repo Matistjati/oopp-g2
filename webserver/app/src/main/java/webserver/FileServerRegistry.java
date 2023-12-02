@@ -38,8 +38,7 @@ public class FileServerRegistry {
         System.out.printf("Client tried to unregister from unregistered name: \"%s\"\n", name);
     }
 
-    public synchronized InetSocketAddress getServerSocketAddress(String serverName)
-    {
+    public synchronized InetSocketAddress getSocketAddress(String serverName) {
         return registered.get(serverName);
     }
 

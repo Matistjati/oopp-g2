@@ -56,6 +56,7 @@ public abstract class Route implements HttpHandler {
         }
         catch(Throwable e) {
             serializeAndWrite(exchange,500, e.getMessage());
+            e.printStackTrace();
         }
         finally {
             exchange.close();
@@ -102,6 +103,11 @@ public abstract class Route implements HttpHandler {
     }
 
     protected String stripUri(URI uri) {
-        return uri.getPath().substring(this.endpoint.length() + 1);
+        try {
+            return uri.getPath().substring(this.endpoint.length() + 1);
+        }
+        catch (IndexOutOfBoundsException e) {
+            return "";
+        }
     }
 }

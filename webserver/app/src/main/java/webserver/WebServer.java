@@ -1,19 +1,13 @@
 package webserver;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.file.Path;
-import java.util.List;
 
 import oopp.cli.Cli;
 import oopp.cli.command.Command;
 import oopp.route.Router;
 import oopp.server.Server;
-import oopp.server.ServerInfo;
-import webserver.routes.FileServersRoute;
-import webserver.routes.FileListRoute;
-import webserver.routes.StaticRoute;
-import webserver.routes.UploadFileRoute;
+import webserver.routes.*;
 
 public class WebServer extends Server {
     private final Cli cli = new Cli(this);
@@ -23,8 +17,9 @@ public class WebServer extends Server {
         super(config.socketAddress());
         Router router = new Router(
                 new StaticRoute(Path.of("./web/")),
+                new ApiFallbackRoute(),
                 new FileServersRoute(this.fileServerRegistry),
-                new FileListRoute(),
+                new FileListRoute(this.fileServerRegistry),
                 new UploadFileRoute(this.fileServerRegistry)
         );
         this.mount(router);

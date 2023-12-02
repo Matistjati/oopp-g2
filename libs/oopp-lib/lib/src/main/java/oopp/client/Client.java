@@ -1,6 +1,8 @@
 package oopp.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
 import oopp.serialize.DeserializingBodyHandler;
 import oopp.serialize.SerializingBodyPublisher;
 
@@ -35,7 +37,7 @@ public class Client {
         }
     }
 
-    private URI createUri(InetSocketAddress socketAddress, final String endpoint) {
+    private static URI createUri(InetSocketAddress socketAddress, final String endpoint) {
         try {
             return new URI("http", null, socketAddress.getHostName(), socketAddress.getPort(), endpoint, null, null);
         }
@@ -50,7 +52,7 @@ public class Client {
 
         private RequestBuilder(final Client client, InetSocketAddress socketAddress, final String endpoint) {
             this.client = client;
-            delegate.uri(client.createUri(socketAddress, endpoint));
+            delegate.uri(Client.createUri(socketAddress, endpoint));
         }
 
         public RequestBuilder post(Object object) {
@@ -70,6 +72,11 @@ public class Client {
 
         public RequestBuilder delete() {
             delegate.DELETE();
+            return this;
+        }
+
+        public RequestBuilder headers(Headers headers) {
+            headers.forEach((name, values) -> values.forEach(value -> delegate.header(name, value)));
             return this;
         }
 

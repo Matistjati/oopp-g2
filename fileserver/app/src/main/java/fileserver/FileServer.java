@@ -1,5 +1,6 @@
 package fileserver;
 
+import fileserver.routes.FileListRoute;
 import oopp.cli.Cli;
 import oopp.cli.command.Command;
 import oopp.route.Router;
@@ -23,6 +24,7 @@ public class FileServer extends Server {
         this.client = new FileServerClient(Jackson.OBJECT_MAPPER, config.webSocketAddress());
         this.name = config.name();
         Router router = new Router(
+                new FileListRoute(),
                 new UploadFileRoute()
         );
         this.mount(router);

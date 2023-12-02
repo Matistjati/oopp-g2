@@ -2,7 +2,6 @@ package webserver.routes;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpHandler;
 import oopp.route.Route;
 import oopp.serialize.Jackson;
 import webserver.FileServerRegistry;
@@ -10,9 +9,6 @@ import webserver.FileServerRegistry;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Map;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -61,7 +57,7 @@ public class UploadFileRoute extends Route {
     protected void forwardFile(InputStream fileContent) {
         // TODO: request should specify which fileserver to upload to
         for (String hostname : fileServerRegistry.getFileServerNameList()) {
-            InetSocketAddress address = fileServerRegistry.getServerSocketAddress(hostname);
+            InetSocketAddress address = fileServerRegistry.getSocketAddress(hostname);
             try {
                 URL url = new URL("http", address.getHostName(), address.getPort(), "/api/uploadfile");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();

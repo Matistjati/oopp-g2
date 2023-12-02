@@ -6,9 +6,6 @@ import FileRow from './FileRow/FileRow';
 
 function FileViewer(props: {selectedServer: string, currentDirectory: Array<string>}) {
     const [fileList, setFileList] = useState<Array<IFile>>([]);
-    useEffect(() => {
-        handleRefresh()
-    }, []);
 
     const handleRefresh = () => {
         if (props.selectedServer == '') {

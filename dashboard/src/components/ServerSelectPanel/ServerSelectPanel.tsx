@@ -33,7 +33,6 @@ function ServerSelectPanel({selectServer}: any) {
                 <span>Available storage units</span>
                 <RefreshButton onClick={handleRefresh} />
             </div>
-            <Delimiter />
             {serverEntries}
         </div>
     );

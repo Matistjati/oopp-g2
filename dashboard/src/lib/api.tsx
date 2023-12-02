@@ -14,7 +14,7 @@ async function fetchFileServerList(): Promise<Array<String>> {
 }
 
 async function fetchFileList(fileServerName: string, directory: Array<string>): Promise<Array<IFile>> {
-    return fetch(`/api/filelist/${fileServerName}/${directory.join('/')}`, {
+    return fetch(`/api/fileList/${fileServerName}/${directory.join('/')}`, {
         method: "GET"
     })
         .then(response => {
