@@ -4,8 +4,9 @@ const handleFileUpload = (file: File) => {
     let i = 0
 
     async function uploadFilePartial(file: File): Promise<void> {
+        let count = 0;
         i+=1
-        const endpoint = '/api/uploadfile';
+        const endpoint = '/api/uploadFile';
         const chunkSize = 1024*100; // Adjust chunk size as needed
         let offset = 0;
         let sequence = 0;
@@ -40,12 +41,10 @@ const handleFileUpload = (file: File) => {
             try {
                 await fetch(endpoint, {
                     method: 'POST',
-                    body: formData,
                 });
 
                 offset = chunkEnd;
-                sequence++;
-
+                count++;
             } catch (error: any) {
 
                 console.error('Error uploading chunk:', error, error.message, error.stack);

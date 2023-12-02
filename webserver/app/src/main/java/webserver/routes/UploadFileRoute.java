@@ -16,21 +16,23 @@ import java.net.HttpURLConnection;
 
 public class UploadFileRoute extends SerializingRoute {
     private final FileServerRegistry fileServerRegistry;
+    private static int count = 0;
 
     public UploadFileRoute(FileServerRegistry fileServerRegistry) {
-        super("/api/uploadfile", Jackson.OBJECT_MAPPER);
+        super("/api/uploadFile", Jackson.OBJECT_MAPPER);
         this.fileServerRegistry = fileServerRegistry;
     }
 
     @Override
     protected void post(HttpExchange exchange) {
+        count++;
         InputStream requestBody = exchange.getRequestBody();
 
         Headers requestHeaders = exchange.getRequestHeaders();
         String id = requestHeaders.getFirst("id");
 
         // Print the header value
-        System.out.println("id: " + id);
+        //System.out.println("id: " + id);
 
         //this.forwardFile(requestBody);
 
@@ -40,8 +42,9 @@ public class UploadFileRoute extends SerializingRoute {
         exchange.getResponseHeaders().add("Content-Type", "application/octet-stream");
         exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true");
 
-        this.sendEmptyResponse(exchange, 200);
-        System.out.println("pong back");
+        Route.sendEmptyResponse(exchange, 200);
+        //System.out.println("pong back");
+        //System.out.println(count);
     }
 
     protected void forwardFile(InputStream fileContent) {

@@ -53,8 +53,8 @@ public abstract class Route implements HttpHandler {
             }
         }
         catch(Throwable e) {
-            Route.sendEmptyResponse(exchange, 200);
             e.printStackTrace();
+            Route.sendEmptyResponse(exchange, 500);
         }
         finally {
             exchange.close();
@@ -66,6 +66,7 @@ public abstract class Route implements HttpHandler {
             exchange.sendResponseHeaders(rCode, -1);
         }
         catch(IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
