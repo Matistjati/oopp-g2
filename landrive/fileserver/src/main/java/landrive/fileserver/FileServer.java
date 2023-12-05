@@ -11,10 +11,15 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.uritemplate.UriTemplate;
 import io.vertx.uritemplate.Variables;
 import landrive.fileserver.config.Config;
+import landrive.fileserver.filesystem.FsHandler;
+import landrive.fileserver.handlers.GetFileListHandler;
 import landrive.lib.cli.command.Command;
 import landrive.lib.server.ServerInfo;
 
+import java.nio.file.Path;
+
 public final class FileServer extends AbstractVerticle {
+    private final FsHandler fsHandler = new FsHandler("storage");
     private final String name;
     private final SocketAddress socketAddress;
     private final SocketAddress webServerSocketAddress;
@@ -30,6 +35,10 @@ public final class FileServer extends AbstractVerticle {
     @Override
     public void start() {
         final Router router = Router.router(this.vertx);
+        router.route().handler(BodyHandler.create());
+        router.getWithRegex("\\/api\\/fileList\\/(?<dir>.*)")
+                .handler(new GetFileListHandler(this.fsHandler));
+
         this.httpServer = this.vertx.createHttpServer().requestHandler(router);
         WebClientOptions clientOptions = new WebClientOptions()
                 .setDefaultHost(webServerSocketAddress.host())

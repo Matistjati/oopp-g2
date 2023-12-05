@@ -13,17 +13,17 @@ public class Registry {
 
     }
 
-    public synchronized void register(final ServerInfo serverInfo) {
+    public void register(final ServerInfo serverInfo) {
         registered.put(serverInfo.name(), serverInfo);
         System.out.println("File server " + serverInfo.name() + " registered.");
     }
 
-    public synchronized void unregister(final String name) {
+    public void unregister(final String name) {
         registered.remove(name);
         System.out.println("File server " + name + " unregistered.");
     }
 
-    public synchronized List<ServerInfo> getFileServerList() {
-        return registered.values().stream().sorted().toList();
+    public List<ServerInfo> getFileServerList() {
+        return this.registered.values().stream().sorted().toList();
     }
 }

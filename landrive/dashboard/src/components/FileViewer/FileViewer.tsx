@@ -4,11 +4,11 @@ import RefreshButton from '../RefreshButton/RefreshButton';
 import {fetchFileList} from '../../lib/api';
 import FileRow from './components/FileRow/FileRow';
 
-function FileViewer(props: {selectedServer: string, currentDirectory: Array<string>}) {
+function FileViewer(props: {selectedServer: ServerInfo | null, currentDirectory: Array<string>}) {
     const [fileList, setFileList] = useState<FsDirectoryList>({dirs: [], files: []});
 
     const handleRefresh = () => {
-        if (props.selectedServer == '') {
+        if (props.selectedServer == null) {
             return;
         }
         fetchFileList(props.selectedServer, props.currentDirectory)
@@ -28,8 +28,10 @@ function FileViewer(props: {selectedServer: string, currentDirectory: Array<stri
         <div>
             <RefreshButton onClick={handleRefresh} />
             <table style={{ width: '100%' }}>
+                <tbody>
                 <tr><td></td><td>Name</td><td>Date</td><td>Size</td></tr>
                 {fileEntries}
+                </tbody>
             </table>
         </div>
     )

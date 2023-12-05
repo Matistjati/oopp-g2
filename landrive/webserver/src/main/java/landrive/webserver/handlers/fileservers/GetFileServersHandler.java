@@ -1,12 +1,17 @@
 package landrive.webserver.handlers.fileservers;
 
+import com.fasterxml.jackson.core.JsonEncoding;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.spi.observability.HttpResponse;
 import io.vertx.ext.web.RoutingContext;
+import landrive.lib.server.ServerInfo;
 import landrive.webserver.registry.Registry;
+
+import java.util.List;
 
 public class GetFileServersHandler implements Handler<RoutingContext> {
     private final Registry registry;
@@ -17,10 +22,10 @@ public class GetFileServersHandler implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext ctx) {
-        final Buffer responseBuffer = JsonObject.mapFrom(this.registry.getFileServerList()).toBuffer();
+        final List<ServerInfo> response = this.registry.getFileServerList();
         ctx.response()
                 .setChunked(true)
                 .setStatusCode(200)
-                .end(responseBuffer);
+                .end(Json.encode(response));
     }
 }

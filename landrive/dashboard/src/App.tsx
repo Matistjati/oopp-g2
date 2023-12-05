@@ -1,18 +1,15 @@
-import { useState } from 'react'
 import './App.css'
+import { useState } from 'react'
 import InputBar from './components/InputBar/InputBar'
 import FileViewer from './components/FileViewer/FileViewer'
-import { fetchFileServerList } from './lib/api'
 import ServerSelectPanel from './components/ServerSelectPanel/ServerSelectPanel'
-import FileUploadButton from './components/FileUploadButton/FileUploadButton'
-import handleFileUpload from "./components/FileUploadButton/HandleFileUpload.tsx";
 
 function App() {
-  const [selectedServer, setSelectedServer] = useState<string>(''); 
+  const [selectedServer, setSelectedServer] = useState<ServerInfo | null>(null);
   const [currentDirectory, setCurrentDirectory] = useState<Array<string>>([]);
   
-  const selectServer = (name: string) => {
-      setSelectedServer(name);
+  const selectServer = (server: ServerInfo) => {
+      setSelectedServer(server);
       setCurrentDirectory([]);
   }
 
@@ -24,7 +21,6 @@ function App() {
           <div className='flex-row panel radius-medium gap-medium' id='filter-panel'>
             <InputBar placeholder="Search" style={{width: '40rem'}}/>
             <InputBar placeholder=".ext" />
-            <FileUploadButton onFileUpload={(file) => { handleFileUpload(file, selectedServer, currentDirectory) }} /> {/* Include the file upload button */}
           </div>
           <div className='panel radius-medium background-2 padding-medium' id='file-browser-panel'>
             <FileViewer selectedServer={selectedServer} currentDirectory={currentDirectory} />

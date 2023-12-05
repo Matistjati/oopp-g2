@@ -2,7 +2,6 @@ package landrive.webserver.handlers.fileservers;
 
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
-import landrive.lib.server.ServerInfo;
 import landrive.webserver.registry.Registry;
 
 public class DeleteFileServersHandler implements Handler<RoutingContext> {

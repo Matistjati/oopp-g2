@@ -5,7 +5,7 @@ import ServerSelectPanelEntry from './components/ServerSelectPanelEntry/ServerSe
 import Delimiter from '../Delimiter/Delimiter';
 
 function ServerSelectPanel({selectServer}: any) {
-    const [serverList, setServerList] = useState<Array<String>>([]);
+    const [serverList, setServerList] = useState<Array<ServerInfo>>([]);
 
     useEffect(() => {
         handleRefresh()
@@ -17,14 +17,14 @@ function ServerSelectPanel({selectServer}: any) {
                 setServerList(serverList);
             })
             .catch(error => {
-                console.error('Error fetching server list:', error);
+                console.error('Error fetching file list:', error);
             });
     };
 
-    const serverEntries = serverList.map(name => (
+    const serverEntries = serverList.map(serverInfo => (
         <ServerSelectPanelEntry onClick={() => {
-            selectServer(name);
-        }} name={name} />
+            selectServer(serverInfo);
+        }} name={serverInfo.name} />
     ));
 
     return (

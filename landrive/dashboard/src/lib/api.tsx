@@ -1,4 +1,4 @@
-async function fetchFileServerList(): Promise<Array<String>> {
+async function fetchFileServerList(): Promise<Array<ServerInfo>> {
     return fetch('/api/fileServers', {
         method: "GET"
     })
@@ -13,8 +13,16 @@ async function fetchFileServerList(): Promise<Array<String>> {
         })
 }
 
-async function fetchFileList(fileServerName: string, directory: Array<string>): Promise<FsDirectoryList> {
-    return fetch(`/api/fileList/${fileServerName}/${directory.join('/')}`, {
+function createRequestUrl(socketAddress: SocketAddress, endpoint: string) : string {
+    return `http://${socketAddress.hostname}:${socketAddress.port}${endpoint}`
+}
+
+async function fetchFileList(server: ServerInfo, directory: Array<string>): Promise<FsDirectoryList> {
+    const requestUrl = createRequestUrl(
+        server.socketAddress,
+        `/api/fileList/${directory.join('/')}`
+    )
+    return fetch(requestUrl, {
         method: "GET"
     })
         .then(response => {
