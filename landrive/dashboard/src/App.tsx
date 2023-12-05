@@ -23,7 +23,7 @@ function App() {
             <InputBar placeholder=".ext" />
           </div>
           <div className='panel radius-medium background-2 padding-medium' id='file-browser-panel'>
-            <FileViewer selectedServer={selectedServer} currentDirectory={currentDirectory} />
+            <FileViewer selectedServer={selectedServer} currentDirectory={currentDirectory} setCurrentDirectory={setCurrentDirectory} />
           </div>
         </div>
       </div>

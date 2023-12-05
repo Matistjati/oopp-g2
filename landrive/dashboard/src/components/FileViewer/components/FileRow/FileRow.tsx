@@ -1,9 +1,16 @@
 import './FileRow.css'
 import NormalFileIcon from '../../../../assets/svg/file-icon.svg'
 
-function FileRow({name, date, size}: any) {
+interface Props {
+    name: string,
+    date: string,
+    size: number,
+    onClick: any
+}
+
+function FileRow({name, date, size, onClick}: Props) {
     return (
-        <tr className='file-row'>
+        <tr className='file-row' onClick={onClick}>
             <td>
                 <img src={NormalFileIcon} alt='' />
             </td>
