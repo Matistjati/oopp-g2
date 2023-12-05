@@ -1,9 +1,9 @@
-import './ServerEntry.css'
+import './ServerSelectPanelEntry.css'
 
-function ServerEntry({name, onClick}: any) {
+function ServerSelectPanelEntry({name, onClick}: any) {
     return(
         <button onClick={onClick} className="server-entry padding-medium" style={{width: '100%'}}>{name}</button>
     )
 }
 
-export default ServerEntry
+export default ServerSelectPanelEntry

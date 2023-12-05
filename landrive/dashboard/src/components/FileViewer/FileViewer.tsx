@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import './FileViewer.css'
 import RefreshButton from '../RefreshButton/RefreshButton';
 import {fetchFileList} from '../../lib/api';
-import FileRow from './FileRow/FileRow';
+import FileRow from './components/FileRow/FileRow';
 
 function FileViewer(props: {selectedServer: string, currentDirectory: Array<string>}) {
     const [fileList, setFileList] = useState<FsDirectoryList>({dirs: [], files: []});

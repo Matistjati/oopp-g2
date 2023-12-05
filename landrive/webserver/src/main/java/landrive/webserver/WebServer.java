@@ -27,7 +27,7 @@ public final class WebServer extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
 
         router.get("/api/fileServers")
-                .handler(new GetFileServersHandler());
+                .handler(new GetFileServersHandler(this.registry));
 
         router.post("/api/fileServers")
                 .handler(new PostFileServersHandler(this.registry));
@@ -35,8 +35,8 @@ public final class WebServer extends AbstractVerticle {
         router.delete("/api/fileServers/:name")
                 .handler(new DeleteFileServersHandler(this.registry));
 
-        /*router.route("/")
-                .handler(StaticHandler.create("webfiles"));*/
+        router.route("/")
+                .handler(StaticHandler.create("webfiles"));
 
         final HttpServer httpServer = this.vertx.createHttpServer().requestHandler(router);
         httpServer.listen(this.socketAddress);

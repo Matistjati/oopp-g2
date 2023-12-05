@@ -1,5 +1,5 @@
 import './FileRow.css'
-import NormalFileIcon from '../../../assets/svg/file-icon.svg'
+import NormalFileIcon from '../../../../assets/svg/file-icon.svg'
 
 function FileRow({name, date, size}: any) {
     return (

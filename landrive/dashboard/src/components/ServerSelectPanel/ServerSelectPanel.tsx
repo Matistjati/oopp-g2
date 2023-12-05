@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import RefreshButton from '../RefreshButton/RefreshButton';
 import { fetchFileServerList } from '../../lib/api';
-import ServerEntry from './components/ServerEntry';
+import ServerSelectPanelEntry from './components/ServerSelectPanelEntry/ServerSelectPanelEntry.tsx';
 import Delimiter from '../Delimiter/Delimiter';
 
 function ServerSelectPanel({selectServer}: any) {
@@ -22,7 +22,7 @@ function ServerSelectPanel({selectServer}: any) {
     };
 
     const serverEntries = serverList.map(name => (
-        <ServerEntry onClick={() => {
+        <ServerSelectPanelEntry onClick={() => {
             selectServer(name);
         }} name={name} />
     ));

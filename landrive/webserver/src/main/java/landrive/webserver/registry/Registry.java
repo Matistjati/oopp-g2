@@ -2,6 +2,7 @@ package landrive.webserver.registry;
 
 import landrive.lib.server.ServerInfo;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,5 +21,9 @@ public class Registry {
     public synchronized void unregister(final String name) {
         registered.remove(name);
         System.out.println("File server " + name + " unregistered.");
+    }
+
+    public synchronized List<ServerInfo> getFileServerList() {
+        return registered.values().stream().sorted().toList();
     }
 }
