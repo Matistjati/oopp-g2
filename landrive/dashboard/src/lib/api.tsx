@@ -47,6 +47,19 @@ async function uploadFile(file: File, server: ServerInfo | null, dir: Array<stri
         const fd = new FormData();
         fd.append('file', file);
         const requestUrl = createRequestUrl(server.socketAddress, `/api/uploadFile/${dir.join('/')}`);
+        /*fetch(requestUrl, {
+            method: 'POST',
+            body: fd
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error();
+                }
+                resolve()
+            })
+            .catch(error => {
+                reject(error)
+            })*/
         axios.post(requestUrl, fd, {
             headers: {
                 'Content-Type': 'multipart/form-data'

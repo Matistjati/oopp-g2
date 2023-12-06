@@ -1,14 +1,8 @@
 package landrive.fileserver.filesystem;
 
 import io.vertx.core.Future;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.file.AsyncFile;
 import io.vertx.core.file.FileSystem;
-import io.vertx.core.file.OpenOptions;
 import io.vertx.core.http.HttpServerFileUpload;
-import io.vertx.core.impl.ContextInternal;
-import io.vertx.core.streams.Pipe;
-import io.vertx.core.streams.impl.PipeImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +16,7 @@ import java.util.concurrent.locks.Lock;
 public class FsService {
     private final FileSystem fs;
     private final Path storageRoot;
-    private final Map<Path, Lock> locks = new ConcurrentHashMap<>();
+    private final Map<Path, Lock> fileLocks = new ConcurrentHashMap<>();
 
     public FsService(final FileSystem fs, final String storageRoot) {
         this.fs = fs;
@@ -37,9 +31,17 @@ public class FsService {
         }
     }
 
+    private boolean validPath(final Path path) {
+        return (path.toAbsolutePath().startsWith(this.storageRoot.toAbsolutePath()));
+    }
+
+    private boolean lock(Path path) {
+        return false;
+    }
+
     public FsDirectoryList getFileList(String path) {
-        final Path dirPath = storageRoot.resolve(path);
-        if (!dirPath.toAbsolutePath().startsWith(this.storageRoot.toAbsolutePath())) {
+        final Path dirPath = this.storageRoot.resolve(path);
+        if (!validPath(dirPath)) {
             return new FsDirectoryList();
         }
         final File dir = dirPath.toFile();
@@ -49,24 +51,11 @@ public class FsService {
         return new FsDirectoryList(dir);
     }
 
-    public Future<Void> uploadFile(HttpServerFileUpload fileUpload) {
-        final Pipe<Buffer> pipe = new PipeImpl<>(fileUpload);
-        final String filename = fileUpload.filename();
-        pipe.endOnComplete(true);
-        Future<AsyncFile> fut = fs.open(this.storageRoot.resolve(filename).toString(), new OpenOptions());
-        fut.onFailure(err -> {
-            pipe.close();
-        });
-        return fut.compose(f -> {
-            Future<Void> to = pipe.to(f);
-            return to.compose(v -> {
-                synchronized (FsService.this) {
-                    return ContextInternal.current().succeededFuture();
-                }
-            }, err -> {
-                fs.delete(filename);
-                return ContextInternal.current().failedFuture(err);
-            });
-        });
+    public Future<Void> uploadFile(final HttpServerFileUpload fileUpload) {
+        final Path filePath = this.storageRoot.resolve(fileUpload.filename());
+        if (!validPath(filePath)) {
+            return Future.failedFuture(new IllegalAccessException("Path is not valid."));
+        }
+        return fileUpload.streamToFileSystem(filePath.toString());
     }
 }
