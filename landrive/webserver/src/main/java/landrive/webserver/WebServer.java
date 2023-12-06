@@ -39,6 +39,7 @@ public final class WebServer extends AbstractVerticle {
 
         final HttpServer httpServer = this.vertx.createHttpServer().requestHandler(router);
         httpServer.listen(this.socketAddress);
+        System.out.println("Web server listening on " + this.socketAddress + ".");
     }
 
     @Command(name = "stop")
