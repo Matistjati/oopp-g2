@@ -1,9 +1,8 @@
 package landrive.lib.route;
 
-import io.vertx.core.Handler;
 import io.vertx.ext.web.Router;
 
-public interface IMountable {
+public interface MountingRoute {
 
     public void mount(Router router);
 }

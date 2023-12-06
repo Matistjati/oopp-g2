@@ -1,18 +1,13 @@
 package landrive.fileserver.handlers;
 
 import io.vertx.core.Handler;
-import io.vertx.core.json.Json;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.net.SocketAddress;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import landrive.fileserver.filesystem.FsDirectoryList;
-import landrive.lib.route.IMountable;
+import landrive.lib.route.MountingRoute;
 
-public class DownloadFileHandler implements IMountable, Handler<RoutingContext> {
+public class DownloadFileHandler implements MountingRoute, Handler<RoutingContext> {
 
     public DownloadFileHandler() {
     }

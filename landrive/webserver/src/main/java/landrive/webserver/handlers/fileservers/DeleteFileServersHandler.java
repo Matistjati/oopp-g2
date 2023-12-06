@@ -3,10 +3,10 @@ package landrive.webserver.handlers.fileservers;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import landrive.webserver.registry.Registry;
-import landrive.lib.route.IMountable;
+import landrive.lib.route.MountingRoute;
 import io.vertx.ext.web.Router;
 
-public class DeleteFileServersHandler implements IMountable, Handler<RoutingContext> {
+public class DeleteFileServersHandler implements MountingRoute, Handler<RoutingContext> {
     private final Registry registry;
 
     public DeleteFileServersHandler(final Registry registry) {

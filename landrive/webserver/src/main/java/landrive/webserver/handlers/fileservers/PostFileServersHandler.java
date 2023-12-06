@@ -3,11 +3,11 @@ package landrive.webserver.handlers.fileservers;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import landrive.lib.route.IMountable;
+import landrive.lib.route.MountingRoute;
 import landrive.lib.server.ServerInfo;
 import landrive.webserver.registry.Registry;
 
-public class PostFileServersHandler implements IMountable, Handler<RoutingContext> {
+public class PostFileServersHandler implements MountingRoute, Handler<RoutingContext> {
     private final Registry registry;
 
     public PostFileServersHandler(final Registry registry) {

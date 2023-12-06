@@ -6,9 +6,9 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsDirectoryList;
 import landrive.fileserver.filesystem.FsService;
-import landrive.lib.route.IMountable;
+import landrive.lib.route.MountingRoute;
 
-public class GetFileListHandler implements IMountable, Handler<RoutingContext> {
+public class GetFileListHandler implements MountingRoute, Handler<RoutingContext> {
     private final FsService fsService;
 
     public GetFileListHandler(final FsService fsService) {

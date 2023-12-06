@@ -6,9 +6,9 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsService;
-import landrive.lib.route.IMountable;
+import landrive.lib.route.MountingRoute;
 
-public class PostUploadFileHandler implements IMountable, Handler<RoutingContext> {
+public class PostUploadFileHandler implements MountingRoute, Handler<RoutingContext> {
     private final FsService fsService;
 
     public PostUploadFileHandler(final FsService fsService) {
