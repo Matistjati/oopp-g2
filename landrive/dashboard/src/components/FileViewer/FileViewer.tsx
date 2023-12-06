@@ -93,7 +93,7 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory}: Pro
         ))
 
     const fileRows = renderFileRows(fileList.files)
-    const dirRows = renderDirRows(fileList.files)
+    const dirRows = renderDirRows(fileList.dirs)
 
     const renderProgressBoxes = () =>
         progressing.map(progress => <ProgressBox key={progress.name} progress={progress}/>)
