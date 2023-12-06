@@ -1,0 +1,3 @@
+interface Filter{
+    name: string
+}
