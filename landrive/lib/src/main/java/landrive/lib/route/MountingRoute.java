@@ -2,7 +2,12 @@ package landrive.lib.route;
 
 import io.vertx.ext.web.Router;
 
-public interface MountingRoute {
+import java.util.List;
 
-    public void mount(Router router);
+public interface MountingRoute {
+    void mount(Router router);
+
+    static void mountAll(final Router router, final MountingRoute... routes) {
+        List.of(routes).forEach(route -> route.mount(router));
+    }
 }

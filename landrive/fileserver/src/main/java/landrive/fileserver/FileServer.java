@@ -12,9 +12,11 @@ import landrive.fileserver.config.Config;
 import landrive.fileserver.filesystem.FsService;
 import landrive.fileserver.handlers.FailureHandler;
 import landrive.fileserver.handlers.DownloadFileHandler;
+import landrive.fileserver.handlers.FileDownloadRoute;
 import landrive.fileserver.handlers.GetFileListHandler;
 import landrive.fileserver.handlers.PostUploadFileHandler;
 import landrive.lib.cli.command.Command;
+import landrive.lib.route.MountingRoute;
 import landrive.lib.server.ServerInfo;
 
 public final class FileServer extends AbstractVerticle {
@@ -35,20 +37,12 @@ public final class FileServer extends AbstractVerticle {
     public void start() {
         this.fsService = new FsService(this.vertx.fileSystem(), "storage");
         final Router router = Router.router(this.vertx);
-
-        DownloadFileHandler downloadFileHandler =
-                new DownloadFileHandler();
-        downloadFileHandler.mount(router);
-
-        GetFileListHandler getFileListHandler =
-                new GetFileListHandler(this.fsService);
-        getFileListHandler.mount(router);
-
-        PostUploadFileHandler postUploadFileHandler =
-                new PostUploadFileHandler(this.fsService);
-        postUploadFileHandler.mount(router);
-
-
+        new FileDownloadRoute(this.fsService).mount(router);
+        MountingRoute.mountAll(router,
+                new FileDownloadRoute(this.fsService),
+                new GetFileListHandler(this.fsService),
+                new PostUploadFileHandler(this.fsService)
+        );
         router.options("/api/uploadFile/*")
                 .handler(ctx -> {
                     ctx.response()
