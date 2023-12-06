@@ -1,0 +1,22 @@
+.text {
+    margin-bottom: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.progress-box {
+    width: 15rem;
+    max-width: 15rem;
+    padding: 1rem;
+    font-size: .9rem;
+}
+
+.progress-bar {
+    height: 100%;
+}
+
+.progress-bar-background {
+    height: .25rem;
+    width: 100%;
+}

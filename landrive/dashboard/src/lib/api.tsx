@@ -1,3 +1,5 @@
+import axios from "axios";
+
 async function fetchFileServerList(): Promise<Array<ServerInfo>> {
     return fetch('/api/fileServers', {
         method: "GET"
@@ -36,27 +38,34 @@ async function fetchFileList(server: ServerInfo, directory: Array<string>): Prom
         })
 }
 
-const uploadFile = (file: File, server: ServerInfo | null, dir: Array<string>, onComplete: () => void) => {
-    if (server == null) {
-        return;
-    }
-    const fd = new FormData();
-    fd.append('file', file);
-    const requestUrl = createRequestUrl(server.socketAddress, `/api/uploadFile/${dir.join('/')}`)
-    fetch(requestUrl, {
-        method: 'POST',
-        body: fd
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error();
-            }
-            onComplete();
+async function uploadFile(file: File, server: ServerInfo | null, dir: Array<string>, updateProgress: (progress: number) => void): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        if (server === null) {
+            reject(new Error("No server selected."));
+            return;
+        }
+        const fd = new FormData();
+        fd.append('file', file);
+        const requestUrl = createRequestUrl(server.socketAddress, `/api/uploadFile/${dir.join('/')}`);
+        axios.post(requestUrl, fd, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: (progressEvent) => {
+                const { loaded, total } = progressEvent;
+                if (total != undefined && total != 0) {
+                    let progress = loaded / total;
+                    updateProgress(progress)
+                }
+            },
         })
-        .catch(error => {
-            throw error
-        })
-};
-
+            .then((response) => {
+                resolve();
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
 
 export { fetchFileServerList, fetchFileList, uploadFile };

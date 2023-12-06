@@ -16,8 +16,7 @@ const FileUploadButton = ({ onFileUpload }: Props) => {
 
     return (
         <div>
-            {/* @ts-expect-error */}
-            <input type="file" webkitdirectory="" directory="" onChange={handleFileChange} />
+            <input type="file" onChange={handleFileChange} />
         </div>
     );
 };

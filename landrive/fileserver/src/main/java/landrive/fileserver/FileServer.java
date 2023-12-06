@@ -40,6 +40,14 @@ public final class FileServer extends AbstractVerticle {
         router.postWithRegex("\\/api\\/uploadFile\\/(?<dir>.*)")
                 .handler(new PostUploadFileHandler(this.fsService));
 
+        router.options("/api/uploadFile/*")
+                .handler(ctx -> {
+                    ctx.response()
+                            .putHeader("Access-Control-Allow-Origin", "*")
+                            .setStatusCode(200)
+                            .end();
+                });
+
         this.httpServer = this.vertx.createHttpServer().requestHandler(router);
         WebClientOptions clientOptions = new WebClientOptions()
                 .setDefaultHost(webServerSocketAddress.host())
