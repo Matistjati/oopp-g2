@@ -7,6 +7,7 @@ import ServerSelectPanel from './components/ServerSelectPanel/ServerSelectPanel'
 function App() {
   const [selectedServer, setSelectedServer] = useState<ServerInfo | null>(null);
   const [currentDirectory, setCurrentDirectory] = useState<Array<string>>([]);
+  const [filter, setFilter] = useState<Filter>({name:""})
   
   const selectServer = (server: ServerInfo) => {
       setSelectedServer(server);
@@ -19,11 +20,11 @@ function App() {
         <ServerSelectPanel selectServer={selectServer} />
         <div className='flex-column gap-medium' style={{height: '100%', flexGrow: '1'}}>
           <div className='flex-row panel radius-medium gap-medium' id='filter-panel'>
-            <InputBar placeholder="Search" style={{width: '40rem'}}/>
+            <InputBar placeholder="Search" style={{width: '40rem'}} setFilter={setFilter}/>
             <InputBar placeholder=".ext" />
           </div>
           <div className='panel radius-medium background-2 padding-medium' id='file-browser-panel'>
-            <FileViewer selectedServer={selectedServer} currentDirectory={currentDirectory} setCurrentDirectory={setCurrentDirectory} />
+            <FileViewer selectedServer={selectedServer} currentDirectory={currentDirectory} setCurrentDirectory={setCurrentDirectory} filter={filter} />
           </div>
         </div>
       </div>

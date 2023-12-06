@@ -9,10 +9,11 @@ import FileUploadButton from "../FileUploadButton/FileUploadButton.tsx";
 interface Props {
     selectedServer: ServerInfo | null,
     currentDirectory: Array<string>,
-    setCurrentDirectory: any
+    setCurrentDirectory: any,
+    filter:Filter
 }
 
-function FileViewer({selectedServer, currentDirectory, setCurrentDirectory}: Props) {
+function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filter}: Props) {
     const [fileList, setFileList] = useState<FsDirectoryList>({dirs: [], files: []});
 
     useEffect(() => {
@@ -47,7 +48,7 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory}: Pro
         ))
 
     const fileRows =
-        fileList.files.map((file) => (
+        fileList.files.filter(file => file.name.includes(filter.name)).map((file) => (
             <FileRow name={file.name} date={file.date} size={file.size} onClick={() => {}} />
         ))
 
