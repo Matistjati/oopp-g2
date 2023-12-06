@@ -35,13 +35,20 @@ public final class FileServer extends AbstractVerticle {
     public void start() {
         this.fsService = new FsService(this.vertx.fileSystem(), "storage");
         final Router router = Router.router(this.vertx);
-        router.getWithRegex("\\/api\\/fileList\\/(?<dir>.*)")
-                .handler(new GetFileListHandler(this.fsService));
 
-        router.postWithRegex("\\/api\\/uploadFile\\/(?<dir>.*)")
-                .handler(new PostUploadFileHandler(this.fsService));
-        router.route("/api/download/:fileName")
-                .handler(new DownloadFileHandler());
+        DownloadFileHandler downloadFileHandler =
+                new DownloadFileHandler();
+        downloadFileHandler.mount(router);
+
+        GetFileListHandler getFileListHandler =
+                new GetFileListHandler(this.fsService);
+        getFileListHandler.mount(router);
+
+        PostUploadFileHandler postUploadFileHandler =
+                new PostUploadFileHandler(this.fsService);
+        postUploadFileHandler.mount(router);
+
+
         router.options("/api/uploadFile/*")
                 .handler(ctx -> {
                     ctx.response()

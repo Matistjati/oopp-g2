@@ -7,10 +7,12 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.net.SocketAddress;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsDirectoryList;
+import landrive.lib.route.IMountable;
 
-public class DownloadFileHandler implements Handler<RoutingContext> {
+public class DownloadFileHandler implements IMountable, Handler<RoutingContext> {
 
     public DownloadFileHandler() {
     }
@@ -40,5 +42,11 @@ public class DownloadFileHandler implements Handler<RoutingContext> {
                         ctx.response().setStatusCode(500).end("Internal Server Error");
                     }
                 });
+    }
+
+    @Override
+    public void mount(Router router) {
+        router.route("/api/download/:fileName")
+                .handler(this);
     }
 }

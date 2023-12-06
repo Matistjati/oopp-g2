@@ -3,10 +3,12 @@ package landrive.fileserver.handlers;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsService;
+import landrive.lib.route.IMountable;
 
-public class PostUploadFileHandler implements Handler<RoutingContext> {
+public class PostUploadFileHandler implements IMountable, Handler<RoutingContext> {
     private final FsService fsService;
 
     public PostUploadFileHandler(final FsService fsService) {
@@ -26,5 +28,11 @@ public class PostUploadFileHandler implements Handler<RoutingContext> {
                     })
                     .onFailure(ctx::fail);
         });
+    }
+
+    @Override
+    public void mount(Router router) {
+        router.postWithRegex("\\/api\\/uploadFile\\/(?<dir>.*)")
+                .handler(this);
     }
 }

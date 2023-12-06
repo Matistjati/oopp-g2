@@ -7,13 +7,15 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.spi.observability.HttpResponse;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import landrive.lib.route.IMountable;
 import landrive.lib.server.ServerInfo;
 import landrive.webserver.registry.Registry;
 
 import java.util.List;
 
-public class GetFileServersHandler implements Handler<RoutingContext> {
+public class GetFileServersHandler implements IMountable, Handler<RoutingContext> {
     private final Registry registry;
 
     public GetFileServersHandler(final Registry registry) {
@@ -27,5 +29,11 @@ public class GetFileServersHandler implements Handler<RoutingContext> {
                 .setChunked(true)
                 .setStatusCode(200)
                 .end(Json.encode(response));
+    }
+
+    @Override
+    public void mount(Router router) {
+        router.get("/api/fileServers")
+                .handler(this);
     }
 }
