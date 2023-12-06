@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
 import './FileViewer.css'
 import RefreshButton from '../RefreshButton/RefreshButton';
-import {fetchFileList} from '../../lib/api';
+import {fetchFileList, uploadFile} from '../../lib/api';
 import FileRow from './components/FileRow/FileRow';
 import BackButton from "../BackButton/BackButton.tsx";
+import FileUploadButton from "../FileUploadButton/FileUploadButton.tsx";
 
 interface Props {
     selectedServer: ServerInfo | null,
@@ -52,6 +53,7 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory}: Pro
 
     return (
         <div>
+            <FileUploadButton onFileUpload={(file: File) => { uploadFile(file, selectedServer, currentDirectory, handleRefresh) } } />
             <RefreshButton onClick={handleRefresh} />
             <BackButton onClick={handleBack} />
             <table style={{ width: '100%' }}>

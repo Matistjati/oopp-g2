@@ -1,11 +1,12 @@
 // FileUploadButton.tsx
 import React, { ChangeEvent } from 'react';
+import {uploadFile} from "../../lib/api.tsx";
 
-interface FileUploadButtonProps {
+interface Props {
     onFileUpload: (file: File) => void;
 }
 
-const FileUploadButton: React.FC<FileUploadButtonProps> = ({ onFileUpload }) => {
+const FileUploadButton = ({ onFileUpload }: Props) => {
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -15,11 +16,10 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({ onFileUpload }) => 
 
     return (
         <div>
-            <input type="file" onChange={handleFileChange} />
+            {/* @ts-expect-error */}
+            <input type="file" webkitdirectory="" directory="" onChange={handleFileChange} />
         </div>
     );
 };
-
-
 
 export default FileUploadButton;

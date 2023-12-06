@@ -2,27 +2,25 @@ package landrive.fileserver;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpServer;
-import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
-import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.uritemplate.UriTemplate;
 import io.vertx.uritemplate.Variables;
 import landrive.fileserver.config.Config;
-import landrive.fileserver.filesystem.FsHandler;
+import landrive.fileserver.filesystem.FsService;
+import landrive.fileserver.handlers.FailureHandler;
 import landrive.fileserver.handlers.GetFileListHandler;
+import landrive.fileserver.handlers.PostUploadFileHandler;
 import landrive.lib.cli.command.Command;
 import landrive.lib.server.ServerInfo;
 
-import java.nio.file.Path;
-
 public final class FileServer extends AbstractVerticle {
-    private final FsHandler fsHandler = new FsHandler("storage");
     private final String name;
     private final SocketAddress socketAddress;
     private final SocketAddress webServerSocketAddress;
+    private FsService fsService;
     private HttpServer httpServer;
     private WebClient client;
 
@@ -34,10 +32,13 @@ public final class FileServer extends AbstractVerticle {
 
     @Override
     public void start() {
+        this.fsService = new FsService(this.vertx.fileSystem(), "storage");
         final Router router = Router.router(this.vertx);
-        router.route().handler(BodyHandler.create());
         router.getWithRegex("\\/api\\/fileList\\/(?<dir>.*)")
-                .handler(new GetFileListHandler(this.fsHandler));
+                .handler(new GetFileListHandler(this.fsService));
+
+        router.postWithRegex("\\/api\\/uploadFile\\/(?<dir>.*)")
+                .handler(new PostUploadFileHandler(this.fsService));
 
         this.httpServer = this.vertx.createHttpServer().requestHandler(router);
         WebClientOptions clientOptions = new WebClientOptions()
