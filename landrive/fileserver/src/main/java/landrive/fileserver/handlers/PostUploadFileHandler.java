@@ -4,10 +4,12 @@ import io.vertx.core.Handler;
 import io.vertx.core.file.FileSystem;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsService;
+import landrive.lib.route.MountingRoute;
 
-public class PostUploadFileHandler implements Handler<RoutingContext> {
+public class PostUploadFileHandler implements MountingRoute, Handler<RoutingContext> {
     private final FsService fsService;
 
     public PostUploadFileHandler(final FsService fsService) {
@@ -28,5 +30,11 @@ public class PostUploadFileHandler implements Handler<RoutingContext> {
                     .setStatusCode(200)
                     .end();
         });
+    }
+
+    @Override
+    public void mount(Router router) {
+        router.postWithRegex("\\/api\\/uploadFile\\/(?<dir>.*)")
+                .handler(this);
     }
 }

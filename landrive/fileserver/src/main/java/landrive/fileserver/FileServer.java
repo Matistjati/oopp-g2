@@ -11,6 +11,7 @@ import io.vertx.uritemplate.Variables;
 import landrive.fileserver.config.Config;
 import landrive.fileserver.filesystem.FsService;
 import landrive.fileserver.handlers.FailureHandler;
+import landrive.fileserver.handlers.DownloadFileHandler;
 import landrive.fileserver.handlers.GetFileListHandler;
 import landrive.fileserver.handlers.PostUploadFileHandler;
 import landrive.lib.cli.command.Command;
@@ -34,11 +35,19 @@ public final class FileServer extends AbstractVerticle {
     public void start() {
         this.fsService = new FsService(this.vertx.fileSystem(), "storage");
         final Router router = Router.router(this.vertx);
-        router.getWithRegex("\\/api\\/fileList\\/(?<dir>.*)")
-                .handler(new GetFileListHandler(this.fsService));
 
-        router.postWithRegex("\\/api\\/uploadFile\\/(?<dir>.*)")
-                .handler(new PostUploadFileHandler(this.fsService));
+        DownloadFileHandler downloadFileHandler =
+                new DownloadFileHandler();
+        downloadFileHandler.mount(router);
+
+        GetFileListHandler getFileListHandler =
+                new GetFileListHandler(this.fsService);
+        getFileListHandler.mount(router);
+
+        PostUploadFileHandler postUploadFileHandler =
+                new PostUploadFileHandler(this.fsService);
+        postUploadFileHandler.mount(router);
+
 
         router.options("/api/uploadFile/*")
                 .handler(ctx -> {
@@ -55,6 +64,7 @@ public final class FileServer extends AbstractVerticle {
 
         this.client = WebClient.create(this.vertx, clientOptions);
         httpServer.listen(this.socketAddress);
+        System.out.println("File server listening on " + this.socketAddress + ".");
     }
 
     @Command(name = "stop")

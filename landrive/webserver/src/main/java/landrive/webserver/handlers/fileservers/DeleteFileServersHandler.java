@@ -3,8 +3,10 @@ package landrive.webserver.handlers.fileservers;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import landrive.webserver.registry.Registry;
+import landrive.lib.route.MountingRoute;
+import io.vertx.ext.web.Router;
 
-public class DeleteFileServersHandler implements Handler<RoutingContext> {
+public class DeleteFileServersHandler implements MountingRoute, Handler<RoutingContext> {
     private final Registry registry;
 
     public DeleteFileServersHandler(final Registry registry) {
@@ -17,5 +19,11 @@ public class DeleteFileServersHandler implements Handler<RoutingContext> {
         this.registry.unregister(name);
         System.out.println("Unregistered file server with name \"" + name + "\".");
         ctx.response().setStatusCode(200).end();
+    }
+
+    @Override
+    public void mount(Router router) {
+        router.delete("/api/fileServers/:name")
+                .handler(this);
     }
 }
