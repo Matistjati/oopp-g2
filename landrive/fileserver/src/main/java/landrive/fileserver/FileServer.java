@@ -35,7 +35,6 @@ public final class FileServer extends AbstractVerticle {
     public void start() {
         this.fsService = new FsService(this.vertx.fileSystem(), "storage");
         final Router router = Router.router(this.vertx);
-        new FileDownloadHandlers(this.fsService).mount(router);
         MountingHandlers.mountAll(router,
                 new FileDownloadHandlers(this.fsService),
                 new FileUploadHandlers(this.fsService),
