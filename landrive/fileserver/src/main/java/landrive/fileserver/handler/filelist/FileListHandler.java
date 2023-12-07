@@ -1,17 +1,15 @@
-package landrive.fileserver.handlers;
+package landrive.fileserver.handler.filelist;
 
 import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
-import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsDirectoryList;
 import landrive.fileserver.filesystem.FsService;
-import landrive.lib.route.MountingRoute;
 
-public class GetFileListHandler implements MountingRoute, Handler<RoutingContext> {
+public class FileListHandler implements Handler<RoutingContext> {
     private final FsService fsService;
 
-    public GetFileListHandler(final FsService fsService) {
+    public FileListHandler(FsService fsService) {
         this.fsService = fsService;
     }
 
@@ -24,11 +22,5 @@ public class GetFileListHandler implements MountingRoute, Handler<RoutingContext
                 .setChunked(true)
                 .setStatusCode(200)
                 .end(Json.encode(response));
-    }
-
-    @Override
-    public void mount(Router router) {
-        router.getWithRegex("\\/api\\/fileList\\/(?<dir>.*)")
-                .handler(this);
     }
 }
