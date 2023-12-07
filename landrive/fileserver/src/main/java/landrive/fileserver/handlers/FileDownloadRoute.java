@@ -6,9 +6,9 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsService;
-import landrive.lib.route.MountingRoute;
+import landrive.lib.route.MountingHandlers;
 
-public class FileDownloadRoute implements MountingRoute {
+public class FileDownloadRoute implements MountingHandlers {
     private final FsService fsService;
 
     public FileDownloadRoute(final FsService fsService) {
