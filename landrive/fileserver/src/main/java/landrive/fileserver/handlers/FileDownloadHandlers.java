@@ -6,12 +6,12 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsService;
-import landrive.lib.route.MountingRoute;
+import landrive.lib.route.MountingHandlers;
 
-public class FileDownloadRoute implements MountingRoute {
+public class FileDownloadHandlers implements MountingHandlers {
     private final FsService fsService;
 
-    public FileDownloadRoute(final FsService fsService) {
+    public FileDownloadHandlers(final FsService fsService) {
         this.fsService = fsService;
     }
 
@@ -46,7 +46,6 @@ public class FileDownloadRoute implements MountingRoute {
 
     @Override
     public void mount(Router router) {
-        router.get("/api/download/:fileName")
-                .handler(new FileDownloadHandler());
+        router.get("/api/download/:fileName").handler(new FileDownloadHandler());
     }
 }

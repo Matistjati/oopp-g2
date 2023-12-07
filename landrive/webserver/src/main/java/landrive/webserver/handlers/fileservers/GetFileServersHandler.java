@@ -4,13 +4,13 @@ import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import landrive.lib.route.MountingRoute;
+import landrive.lib.route.MountingHandlers;
 import landrive.lib.server.ServerInfo;
 import landrive.webserver.registry.Registry;
 
 import java.util.List;
 
-public class GetFileServersHandler implements MountingRoute, Handler<RoutingContext> {
+public class GetFileServersHandler implements MountingHandlers, Handler<RoutingContext> {
     private final Registry registry;
 
     public GetFileServersHandler(final Registry registry) {

@@ -10,13 +10,11 @@ import io.vertx.uritemplate.UriTemplate;
 import io.vertx.uritemplate.Variables;
 import landrive.fileserver.config.Config;
 import landrive.fileserver.filesystem.FsService;
-import landrive.fileserver.handlers.FailureHandler;
-import landrive.fileserver.handlers.DownloadFileHandler;
-import landrive.fileserver.handlers.FileDownloadRoute;
-import landrive.fileserver.handlers.GetFileListHandler;
-import landrive.fileserver.handlers.PostUploadFileHandler;
+import landrive.fileserver.handlers.FileDownloadHandlers;
+import landrive.fileserver.handlers.FileListHandlers;
+import landrive.fileserver.handlers.FileUploadHandlers;
 import landrive.lib.cli.command.Command;
-import landrive.lib.route.MountingRoute;
+import landrive.lib.route.MountingHandlers;
 import landrive.lib.server.ServerInfo;
 
 public final class FileServer extends AbstractVerticle {
@@ -37,20 +35,12 @@ public final class FileServer extends AbstractVerticle {
     public void start() {
         this.fsService = new FsService(this.vertx.fileSystem(), "storage");
         final Router router = Router.router(this.vertx);
-        new FileDownloadRoute(this.fsService).mount(router);
-        MountingRoute.mountAll(router,
-                new FileDownloadRoute(this.fsService),
-                new GetFileListHandler(this.fsService),
-                new PostUploadFileHandler(this.fsService)
+        new FileDownloadHandlers(this.fsService).mount(router);
+        MountingHandlers.mountAll(router,
+                new FileDownloadHandlers(this.fsService),
+                new FileUploadHandlers(this.fsService),
+                new FileListHandlers(this.fsService)
         );
-        router.options("/api/uploadFile/*")
-                .handler(ctx -> {
-                    ctx.response()
-                            .putHeader("Access-Control-Allow-Origin", "*")
-                            .setStatusCode(200)
-                            .end();
-                });
-
         this.httpServer = this.vertx.createHttpServer().requestHandler(router);
         WebClientOptions clientOptions = new WebClientOptions()
                 .setDefaultHost(webServerSocketAddress.host())
