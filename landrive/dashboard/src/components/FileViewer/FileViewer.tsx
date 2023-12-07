@@ -77,7 +77,7 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory}: Pro
                 date={file.date}
                 size={file.size}
                 onClick={() => {
-                    window.location.href = `http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(currentDirectory.join('/'))}`;
+                    window.location.href = "http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(currentDirectory.join('/'))}";
                 }} />
         ))
 
