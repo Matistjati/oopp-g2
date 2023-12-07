@@ -5,8 +5,6 @@ import io.vertx.core.file.FileSystem;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerFileUpload;
 import io.vertx.core.http.HttpServerResponse;
-import io.vertx.ext.web.RoutingContext;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -74,7 +72,6 @@ public class FsService {
                 ar.cause().printStackTrace();
             }
         });
-
         return Future.succeededFuture();
 
     }

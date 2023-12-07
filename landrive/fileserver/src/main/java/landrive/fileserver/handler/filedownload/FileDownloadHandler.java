@@ -2,10 +2,8 @@ package landrive.fileserver.handler.filedownload;
 
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerResponse;
-import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsService;
-import landrive.lib.route.MountingHandlers;
 
 public class FileDownloadHandler implements Handler<RoutingContext> {
     private final FsService fsService;
