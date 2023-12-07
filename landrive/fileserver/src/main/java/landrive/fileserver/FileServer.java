@@ -10,16 +10,9 @@ import io.vertx.uritemplate.UriTemplate;
 import io.vertx.uritemplate.Variables;
 import landrive.fileserver.config.Config;
 import landrive.fileserver.filesystem.FsService;
-<<<<<<< HEAD
-import landrive.fileserver.handlers.FailureHandler;
-import landrive.fileserver.handlers.FileDownloadRoute;
-import landrive.fileserver.handlers.GetFileListHandler;
-import landrive.fileserver.handlers.PostUploadFileHandler;
-=======
 import landrive.fileserver.handler.filedownload.FileDownloadHandlers;
 import landrive.fileserver.handler.filelist.FileListHandlers;
 import landrive.fileserver.handler.fileupload.FileUploadHandlers;
->>>>>>> origin/main
 import landrive.lib.cli.command.Command;
 import landrive.lib.route.MountingHandlers;
 import landrive.lib.server.ServerInfo;
@@ -47,7 +40,6 @@ public final class FileServer extends AbstractVerticle {
                 new FileUploadHandlers(this.fsService),
                 new FileListHandlers(this.fsService)
         );
-<<<<<<< HEAD
 
         router.options("/api/uploadFile/*")
                 .handler(ctx -> {
@@ -57,8 +49,7 @@ public final class FileServer extends AbstractVerticle {
                             .end();
                 });
 
-=======
->>>>>>> origin/main
+
         this.httpServer = this.vertx.createHttpServer().requestHandler(router);
         WebClientOptions clientOptions = new WebClientOptions()
                 .setDefaultHost(webServerSocketAddress.host())
