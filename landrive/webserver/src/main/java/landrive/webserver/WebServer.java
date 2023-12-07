@@ -7,10 +7,10 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import landrive.lib.cli.command.Command;
+import landrive.lib.route.MountingHandlers;
 import landrive.webserver.config.Config;
-import landrive.webserver.handlers.fileservers.DeleteFileServersHandler;
-import landrive.webserver.handlers.fileservers.GetFileServersHandler;
-import landrive.webserver.handlers.fileservers.PostFileServersHandler;
+import landrive.webserver.handler.dashboard.StaticHandlers;
+import landrive.webserver.handler.fileservers.FileServersHandlers;
 import landrive.webserver.registry.Registry;
 
 public final class WebServer extends AbstractVerticle {
@@ -25,24 +25,10 @@ public final class WebServer extends AbstractVerticle {
     public void start() {
         final Router router = Router.router(this.vertx);
         router.route().handler(BodyHandler.create());
-
-
-        GetFileServersHandler getFileServersHandler =
-                new GetFileServersHandler(this.registry);
-        getFileServersHandler.mount(router);
-
-        PostFileServersHandler postFileServersHandler =
-                new PostFileServersHandler(this.registry);
-        postFileServersHandler.mount(router);
-
-        DeleteFileServersHandler deleteFileServersHandler =
-                new DeleteFileServersHandler(this.registry);
-        deleteFileServersHandler.mount(router);
-
-
-        router.route("/dashboard/*")
-                .handler(StaticHandler.create("webfiles"));
-
+        MountingHandlers.mountAll(router,
+                new FileServersHandlers(this.registry),
+                new StaticHandlers()
+        );
         final HttpServer httpServer = this.vertx.createHttpServer().requestHandler(router);
         httpServer.listen(this.socketAddress);
         System.out.println("Web server listening on " + this.socketAddress + ".");

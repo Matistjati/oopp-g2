@@ -1,19 +1,17 @@
-package landrive.webserver.handlers.fileservers;
+package landrive.webserver.handler.fileservers;
 
 import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
-import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import landrive.lib.route.MountingHandlers;
 import landrive.lib.server.ServerInfo;
 import landrive.webserver.registry.Registry;
 
 import java.util.List;
 
-public class GetFileServersHandler implements MountingHandlers, Handler<RoutingContext> {
+public class ListFileServersHandler implements Handler<RoutingContext> {
     private final Registry registry;
 
-    public GetFileServersHandler(final Registry registry) {
+    public ListFileServersHandler(final Registry registry) {
         this.registry = registry;
     }
 
@@ -24,11 +22,5 @@ public class GetFileServersHandler implements MountingHandlers, Handler<RoutingC
                 .setChunked(true)
                 .setStatusCode(200)
                 .end(Json.encode(response));
-    }
-
-    @Override
-    public void mount(Router router) {
-        router.get("/api/fileServers")
-                .handler(this);
     }
 }

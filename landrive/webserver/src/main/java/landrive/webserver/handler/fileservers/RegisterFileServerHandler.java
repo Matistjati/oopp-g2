@@ -1,16 +1,14 @@
-package landrive.webserver.handlers.fileservers;
+package landrive.webserver.handler.fileservers;
 
 import io.vertx.core.Handler;
-import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import landrive.lib.route.MountingHandlers;
 import landrive.lib.server.ServerInfo;
 import landrive.webserver.registry.Registry;
 
-public class PostFileServersHandler implements MountingHandlers, Handler<RoutingContext> {
+public class RegisterFileServerHandler implements Handler<RoutingContext> {
     private final Registry registry;
 
-    public PostFileServersHandler(final Registry registry) {
+    public RegisterFileServerHandler(final Registry registry) {
         this.registry = registry;
     }
 
@@ -20,11 +18,5 @@ public class PostFileServersHandler implements MountingHandlers, Handler<Routing
         registry.register(info);
         ctx.response().setStatusCode(200).end();
         System.out.println("Registered file server with name \"" + info.name() + "\".");
-    }
-
-    @Override
-    public void mount(Router router) {
-        router.post("/api/fileServers")
-                .handler(this);
     }
 }
