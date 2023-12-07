@@ -17,9 +17,10 @@ public class FileUploadHandler implements Handler<RoutingContext> {
     public void handle(RoutingContext ctx) {
         final HttpServerRequest request = ctx.request();
         final HttpServerResponse response = ctx.response();
+        final String dir = ctx.pathParam("dir");
         request.setExpectMultipart(true);
         request.uploadHandler(fileUpload -> {
-            fsService.uploadFile(fileUpload)
+            fsService.uploadFile(fileUpload, dir)
                     .onFailure(ctx::fail);
         }).endHandler(unused -> {
             response

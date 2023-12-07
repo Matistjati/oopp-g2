@@ -21,9 +21,7 @@ public class FileDownloadHandler implements Handler<RoutingContext> {
         if (directory == null) {
             directory = "";
         }
-
         HttpServerResponse response = ctx.response();
-
         fsService.downloadFile(fileName, directory, response).onFailure(ctx::fail);
     }
 }
