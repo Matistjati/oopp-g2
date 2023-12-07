@@ -11,7 +11,6 @@ import io.vertx.uritemplate.Variables;
 import landrive.fileserver.config.Config;
 import landrive.fileserver.filesystem.FsService;
 import landrive.fileserver.handlers.FailureHandler;
-import landrive.fileserver.handlers.DownloadFileHandler;
 import landrive.fileserver.handlers.FileDownloadRoute;
 import landrive.fileserver.handlers.GetFileListHandler;
 import landrive.fileserver.handlers.PostUploadFileHandler;
@@ -43,6 +42,7 @@ public final class FileServer extends AbstractVerticle {
                 new GetFileListHandler(this.fsService),
                 new PostUploadFileHandler(this.fsService)
         );
+
         router.options("/api/uploadFile/*")
                 .handler(ctx -> {
                     ctx.response()

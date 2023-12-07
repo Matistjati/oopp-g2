@@ -73,12 +73,11 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory}: Pro
     const renderFileRows = (files: FsEntryInfo[]) =>
         files.map(file => (
             <FileRow
-                key={file.name}
                 name={file.name}
                 date={file.date}
                 size={file.size}
-                onClick={() => {() => {
-                    window.location.href = "http://localhost:8000/api/download/${encodeURIComponent(file.name)}";}
+                onClick={() => {
+                    window.location.href = `http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(currentDirectory.join('/'))}`;
                 }} />
         ))
 

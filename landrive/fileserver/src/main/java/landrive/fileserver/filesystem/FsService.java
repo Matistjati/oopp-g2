@@ -2,7 +2,10 @@ package landrive.fileserver.filesystem;
 
 import io.vertx.core.Future;
 import io.vertx.core.file.FileSystem;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerFileUpload;
+import io.vertx.core.http.HttpServerResponse;
+import io.vertx.ext.web.RoutingContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +52,31 @@ public class FsService {
             throw new RuntimeException();
         }
         return new FsDirectoryList(dir);
+    }
+
+    public Future<Void> downloadFile(final String fileName, final String subDirectory, HttpServerResponse response) {
+        final Path filePath = this.storageRoot.resolve(subDirectory).resolve(fileName);
+        final String filePathString = filePath.toString();
+
+        System.out.println("Downloading file: " + fileName + " from directory: " + filePathString);
+
+        if (!validPath(filePath)) {
+            return Future.failedFuture(new IllegalAccessException("Path is not valid."));
+        }
+
+        response.putHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+        response.putHeader(HttpHeaders.CONTENT_TYPE, "application/octet-stream");
+        response.sendFile(filePathString, ar -> {
+            if (ar.succeeded()) {
+                System.out.println("File downloaded successfully");
+            } else {
+                System.out.println("File download failed");
+                ar.cause().printStackTrace();
+            }
+        });
+
+        return Future.succeededFuture();
+
     }
 
     public Future<Void> uploadFile(final HttpServerFileUpload fileUpload) {
