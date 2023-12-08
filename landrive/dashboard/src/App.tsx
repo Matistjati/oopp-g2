@@ -3,8 +3,8 @@ import {ChangeEvent, ChangeEventHandler, useState} from 'react'
 import InputBar from './components/InputBar/InputBar'
 import FileViewer from './components/FileViewer/FileViewer'
 import ServerSelectPanel from './components/ServerSelectPanel/ServerSelectPanel'
-import ContextMenu from './components/ContextMenu/ContextMenu.tsx'
 import {Filter} from "./lib/class/Filter.tsx";
+import ContextMenu, {ContextMenuProvider} from './components/ContextMenu/ContextMenu.tsx'
 
 function App() {
   const [selectedServer, setSelectedServer] = useState<ServerInfo | null>(null);
@@ -28,7 +28,7 @@ function App() {
 
   return (
     <>
-      <ContextMenu>
+      <ContextMenuProvider>
         <div className='flex-row gap-medium padding-big background-1 text-1' style={{height: '100%', width: '100%', overflow: 'auto'}}>
           <ServerSelectPanel selectServer={selectServer} />
           <div className='flex-column gap-medium' style={{height: '100vh', flexGrow: '1'}}>
@@ -41,7 +41,7 @@ function App() {
             </div>
           </div>
         </div>
-      </ContextMenu>
+      </ContextMenuProvider>
     </>
   )
 }

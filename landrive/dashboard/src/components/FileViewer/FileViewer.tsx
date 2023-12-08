@@ -67,14 +67,6 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
             })
     }
 
-    const getFileContextItems = (name: string) => {
-        return [["Download", "console.log('downloaded')"]]
-    }
-
-    const getDirContextItems = (name: string) => {
-        return [["Rename", "console.log('renamed folder')"]]
-    }
-
     const renderFileRows = (files: FsEntryInfo[]) =>
         files.map(file => (
             <FileRow
@@ -84,8 +76,6 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
                 onClick={() => {
                     window.location.href = `http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(currentDirectory.join('/'))}`;
                 }}
-
-                contextMenuItems={getFileContextItems(file.name)}
             />
         ))
 
@@ -97,7 +87,6 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
                 date={dir.date}
                 size={dir.size}
                 onClick={() => setCurrentDirectory(prevState => prevState.concat(dir.name))}
-                contextMenuItems={getDirContextItems(dir.name)}
             />
         ))
 
