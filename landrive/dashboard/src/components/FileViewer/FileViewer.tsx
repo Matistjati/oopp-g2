@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
+import React, {Dispatch, SetStateAction, useCallback, useEffect, useState} from 'react'
 import './FileViewer.css'
 import RefreshButton from '../RefreshButton/RefreshButton'
 import {fetchFileList, uploadFile} from '../../lib/api'
@@ -6,7 +6,7 @@ import FileRow from './components/FileRow/FileRow'
 import BackButton from '../BackButton/BackButton.tsx'
 import FileUploadButton from '../FileUploadButton/FileUploadButton.tsx'
 import ProgressBox from '../ProgressBox/ProgressBox.tsx'
-import Filter from '../../lib/interface/Filter.tsx'
+import {Filter} from "../../lib/class/Filter.tsx";
 
 interface Props {
     selectedServer: ServerInfo | null
@@ -19,12 +19,10 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
     const [progressing, setProgressing] = useState<ProgressInfo[]>([])
     const [fileList, setFileList] = useState<FsDirectoryList>({dirs: [], files: []})
     const [uploadCount, setUploadCount] = useState<number>(0)
+    const [filteredFiles, setFilteredFiles] = useState<FsEntryInfo[]>([]);
+    const [filteredDirs, setFilteredDirs] = useState<FsEntryInfo[]>([]);
 
-    useEffect(() => {
-        handleRefresh()
-    }, [selectedServer, currentDirectory])
-
-    const handleRefresh = () => {
+    const handleRefresh = useCallback(() => {
         if (!selectedServer) return
 
         fetchFileList(selectedServer, currentDirectory)
@@ -34,7 +32,17 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
             .catch(error => {
                 console.error('Error fetching server list:', error)
             })
-    }
+    }, [selectedServer, currentDirectory])
+
+    const handleFilterUpdate = useCallback(() => {
+        const filteredFiles = filter.apply(fileList.files);
+        const filteredDirs = filter.apply(fileList.dirs);
+        setFilteredFiles(filteredFiles);
+        setFilteredDirs(filteredDirs);
+    }, [fileList.dirs, fileList.files, filter])
+
+    useEffect(handleRefresh)
+    useEffect(handleFilterUpdate)
 
     const handleBack = () => {
         if (currentDirectory.length > 0) {
@@ -80,7 +88,7 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
     }
 
     const renderFileRows = (files: FsEntryInfo[]) =>
-        filter.process(files).map(file => (
+        files.map(file => (
             <FileRow
                 name={file.name}
                 date={file.date}
@@ -105,8 +113,8 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
             />
         ))
 
-    const fileRows = renderFileRows(fileList.files)
-    const dirRows = renderDirRows(fileList.dirs)
+    const fileRows = renderFileRows(filteredFiles)
+    const dirRows = renderDirRows(filteredDirs)
 
     const renderProgressBoxes = () =>
         progressing.map(progress => <ProgressBox key={progress.name} progress={progress}/>)

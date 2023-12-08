@@ -1,8 +1,15 @@
 import './InputBar.css'
+import {ChangeEventHandler, CSSProperties} from "react";
 
-function InputBar({placeholder, style, setFilter}:any) {
+interface Props {
+    placeholder: string,
+    style?: CSSProperties | undefined
+    onChange: ChangeEventHandler<HTMLInputElement> | undefined
+}
+
+function InputBar({placeholder, style, onChange}: Props) {
   return (
-    <input type='text' className='input-bar padding-medium radius-medium background-3' placeholder={placeholder} style={style} onChange={setFilter} />
+    <input type='text' className='input-bar padding-medium radius-medium background-3' placeholder={placeholder} style={style} onChange={onChange} />
   )
 }
 
