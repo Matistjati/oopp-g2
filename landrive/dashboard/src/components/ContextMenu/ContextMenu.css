@@ -1,0 +1,11 @@
+
+.contextmenu-item
+{
+    padding: 3px;
+    background-color: white;
+}
+
+.contextmenu-item:hover
+{
+    background-color: #4d4d4d;
+}
