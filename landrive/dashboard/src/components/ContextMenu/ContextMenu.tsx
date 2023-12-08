@@ -10,15 +10,12 @@ const ContextMenu: React.FC<ContextMenuModuleProps> = ({ children }) => {
         = useState<{ top: number; left: number } | null>(null);
     const [contextMenuItems, setContextMenuItems] = useState<JSX.Element[] | null>(null);
 
+    // Handle right-clicking any item on the webpage
     const handleContextMenu = (e: any) => {
-        e.preventDefault();
+        e.preventDefault(); // TODO: do we want to block only our meny should show instead?
 
-        console.log(e.target);
-        console.log(e.target.keys);
         const v = JSON.parse(e.target.dataset.contextmenuitems);
-        console.log(v);
-        console.log(v[0])
-        console.log(v[1])
+        // If it has items for the menu, display them
         if (v!=null)
         {
             const items = v.map((item:any, index:number) => (
@@ -27,19 +24,16 @@ const ContextMenu: React.FC<ContextMenuModuleProps> = ({ children }) => {
                 </div>
             ));
 
-
             setContextMenuItems([items]);
-            console.log(v);
             setContextMenuPosition({ top: e.clientY, left: e.clientX });
-
         }
-
     };
 
     const closeContextMenu = () => {
         setContextMenuPosition(null);
     };
 
+    // If we left click outside of menu, close it
     useEffect(() => {
         const handleOutsideClick = (e: any) : void => {
             // Check if the click is outside the context menu
@@ -63,6 +57,7 @@ const ContextMenu: React.FC<ContextMenuModuleProps> = ({ children }) => {
         };
     }, [contextMenuPosition]);
 
+    // Create the menu
         return (
         <>
             <div onContextMenu={handleContextMenu}>{children}</div>
