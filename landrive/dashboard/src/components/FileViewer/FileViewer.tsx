@@ -19,8 +19,6 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
     const [progressing, setProgressing] = useState<ProgressInfo[]>([])
     const [fileList, setFileList] = useState<FsDirectoryList>({dirs: [], files: []})
     const [uploadCount, setUploadCount] = useState<number>(0)
-    const [filteredFiles, setFilteredFiles] = useState<FsEntryInfo[]>([]);
-    const [filteredDirs, setFilteredDirs] = useState<FsEntryInfo[]>([]);
 
     const handleRefresh = useCallback(() => {
         if (!selectedServer) return
@@ -33,16 +31,6 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
                 console.error('Error fetching server list:', error)
             })
     }, [selectedServer, currentDirectory])
-
-    const handleFilterUpdate = useCallback(() => {
-        const filteredFiles = filter.apply(fileList.files);
-        const filteredDirs = filter.apply(fileList.dirs);
-        setFilteredFiles(filteredFiles);
-        setFilteredDirs(filteredDirs);
-    }, [fileList.dirs, fileList.files, filter])
-
-    useEffect(handleRefresh)
-    useEffect(handleFilterUpdate)
 
     const handleBack = () => {
         if (currentDirectory.length > 0) {
@@ -113,8 +101,8 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
             />
         ))
 
-    const fileRows = renderFileRows(filteredFiles)
-    const dirRows = renderDirRows(filteredDirs)
+    const fileRows = renderFileRows(fileList.files)
+    const dirRows = renderDirRows(fileList.dirs)
 
     const renderProgressBoxes = () =>
         progressing.map(progress => <ProgressBox key={progress.name} progress={progress}/>)
