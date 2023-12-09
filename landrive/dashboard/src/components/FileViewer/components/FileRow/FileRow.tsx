@@ -1,28 +1,27 @@
 import './FileRow.css'
 import NormalFileIcon from '../../../../assets/svg/file-icon.svg'
-import {AriaAttributes, DOMAttributes} from "react";
+import {MouseEventHandler} from "react";
 
 interface Props {
     name: string,
     date: string,
     size: number,
-    onClick: any,
-    contextMenuItems: any[], // Too lazy to figure out type
+    onClick: MouseEventHandler<HTMLTableRowElement>,
 }
 
-function FileRow({name, date, size, onClick, contextMenuItems}: Props) {
+function FileRow({name, date, size, onClick}: Props) {
     return (
         <tr className='file-row' onClick={onClick}>
             <td>
                 <img src={NormalFileIcon} alt='' />
             </td>
-            <td className='file-name' data-contextmenuitems={JSON.stringify(contextMenuItems)}>
+            <td className='file-name'>
                 {name}
             </td>
-            <td className='file-date' data-contextmenuitems={JSON.stringify(contextMenuItems)}>
+            <td className='file-date'>
                 {date}
             </td>
-            <td className='file-size' data-contextmenuitems={JSON.stringify(contextMenuItems)}>
+            <td className='file-size'>
                 {size}
             </td>
         </tr>

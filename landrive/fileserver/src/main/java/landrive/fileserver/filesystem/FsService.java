@@ -58,10 +58,6 @@ public class FsService {
         return false;
     }
 
-    private synchronized boolean tryWriterLock(Path path) {
-        return tryWriterLock(path.toFile());
-    }
-
     private synchronized void writerUnlock(final Path path) {
         this.writerUnlock(path.toFile());
     }
@@ -75,6 +71,10 @@ public class FsService {
         for (File child : children) {
             this.writerUnlock(child);
         }
+    }
+
+    private synchronized boolean tryWriterLock(Path path) {
+        return tryWriterLock(path.toFile());
     }
 
     private synchronized boolean tryWriterLock(final File file) {

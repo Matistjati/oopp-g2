@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useCallback, useEffect, useState} from 'react'
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import './FileViewer.css'
 import RefreshButton from '../RefreshButton/RefreshButton'
 import {fetchFileList, uploadFile} from '../../lib/api'
@@ -6,7 +6,7 @@ import FileRow from './components/FileRow/FileRow'
 import BackButton from '../BackButton/BackButton.tsx'
 import FileUploadButton from '../FileUploadButton/FileUploadButton.tsx'
 import ProgressBox from '../ProgressBox/ProgressBox.tsx'
-import {Filter} from "../../lib/class/Filter.tsx";
+import {Filter, applyFilter, emptyFilter} from "../../lib/interface/Filter.tsx";
 
 interface Props {
     selectedServer: ServerInfo | null
@@ -17,20 +17,30 @@ interface Props {
 
 function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filter}: Props) {
     const [progressing, setProgressing] = useState<ProgressInfo[]>([])
-    const [fileList, setFileList] = useState<FsDirectoryList>({dirs: [], files: []})
+    const [fsDirectoryList, setFsDirectoryList] = useState<FsDirectoryList>({files: [], dirs: []})
+    const [filteredFileList, setFilteredFileList] = useState<FsEntryInfo[]>([])
+    const [filteredDirList, setFilteredDirList] = useState<FsEntryInfo[]>([])
     const [uploadCount, setUploadCount] = useState<number>(0)
 
-    const handleRefresh = useCallback(() => {
+    const handleRefresh = () => {
         if (!selectedServer) return
-
         fetchFileList(selectedServer, currentDirectory)
-            .then(serverList => {
-                setFileList(serverList)
+            .then(fsDirectoryList => {
+                setFsDirectoryList(fsDirectoryList)
             })
             .catch(error => {
                 console.error('Error fetching server list:', error)
             })
-    }, [selectedServer, currentDirectory])
+    }
+
+    useEffect(() => {
+        handleRefresh()
+    }, [selectedServer, currentDirectory]);
+
+    useEffect(() => {
+        setFilteredFileList(applyFilter(filter, fsDirectoryList.files))
+        setFilteredDirList(applyFilter(filter, fsDirectoryList.dirs))
+    }, [filter, fsDirectoryList]);
 
     const handleBack = () => {
         if (currentDirectory.length > 0) {
@@ -67,14 +77,6 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
             })
     }
 
-    const getFileContextItems = (name: string) => {
-        return [["Download", "console.log('downloaded')"]]
-    }
-
-    const getDirContextItems = (name: string) => {
-        return [["Rename", "console.log('renamed folder')"]]
-    }
-
     const renderFileRows = (files: FsEntryInfo[]) =>
         files.map(file => (
             <FileRow
@@ -84,8 +86,6 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
                 onClick={() => {
                     window.location.href = `http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(currentDirectory.join('/'))}`;
                 }}
-
-                contextMenuItems={getFileContextItems(file.name)}
             />
         ))
 
@@ -97,12 +97,11 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
                 date={dir.date}
                 size={dir.size}
                 onClick={() => setCurrentDirectory(prevState => prevState.concat(dir.name))}
-                contextMenuItems={getDirContextItems(dir.name)}
             />
         ))
 
-    const fileRows = renderFileRows(fileList.files)
-    const dirRows = renderDirRows(fileList.dirs)
+    const fileRows = renderFileRows(filteredFileList)
+    const dirRows = renderDirRows(filteredDirList)
 
     const renderProgressBoxes = () =>
         progressing.map(progress => <ProgressBox key={progress.name} progress={progress}/>)
