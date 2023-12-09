@@ -1,36 +1,46 @@
-import React, {useState, ReactNode, MouseEvent, useEffect} from 'react';
+import React, {
+    useState,
+    ReactNode,
+    MouseEvent,
+    useEffect,
+    Dispatch,
+    SetStateAction,
+    createContext,
+    useContext
+} from 'react';
 import './ContextMenu.css'
 
-interface ContextMenuModuleProps {
+interface ContextMenuProviderProps {
     children: ReactNode;
 }
 
-const ContextMenu: React.FC<ContextMenuModuleProps> = ({ children }) => {
+interface ContextMenuContextType {
+    showContextMenu: (event: React.MouseEvent, args: any) => void;
+}
+
+const ContextMenuContext = createContext<ContextMenuContextType | undefined>(undefined);
+
+export const ContextMenuProvider: React.FC<ContextMenuProviderProps> = ({ children }) => {
     const [contextMenuPosition, setContextMenuPosition]
         = useState<{ top: number; left: number } | null>(null);
+
     const [contextMenuItems, setContextMenuItems] = useState<JSX.Element[] | null>(null);
-
-    // Handle right-clicking any item on the webpage
-    const handleContextMenu = (e: any) => {
-        e.preventDefault(); // TODO: do we want to block only our meny should show instead?
-
-        const v = JSON.parse(e.target.dataset.contextmenuitems);
-        // If it has items for the menu, display them
-        if (v!=null)
-        {
-            const items = v.map((item:any, index:number) => (
-                <div key={index} className="contextmenu-item" onClick={() => eval(item[1])}>
-                    {item[0]}
-                </div>
-            ));
-
-            setContextMenuItems([items]);
-            setContextMenuPosition({ top: e.clientY, left: e.clientX });
-        }
-    };
 
     const closeContextMenu = () => {
         setContextMenuPosition(null);
+    };
+
+    const showContextMenu = (e: React.MouseEvent, items: any) => {
+        e.preventDefault();
+
+        const menu = items.map((item:any, index:number) => (
+            <div key={index} className="contextmenu-item" onClick={() => item[1]()}>
+                {item[0]}
+            </div>
+        ));
+
+        setContextMenuItems([menu]);
+        setContextMenuPosition({ top: e.clientY, left: e.clientX });
     };
 
     // If we left click outside of menu, close it
@@ -57,11 +67,9 @@ const ContextMenu: React.FC<ContextMenuModuleProps> = ({ children }) => {
         };
     }, [contextMenuPosition]);
 
-    // Create the menu
-        return (
-        <>
-            <div onContextMenu={handleContextMenu}>{children}</div>
-
+    return (
+        <ContextMenuContext.Provider value={{ showContextMenu }}>
+            {children}
             {contextMenuPosition && (
                 <div
                     style={{
@@ -80,8 +88,16 @@ const ContextMenu: React.FC<ContextMenuModuleProps> = ({ children }) => {
                     {contextMenuItems}
                 </div>
             )}
-        </>
+        </ContextMenuContext.Provider>
     );
 };
 
-export default ContextMenu;
+export const useContextMenu = () => {
+    const context = useContext(ContextMenuContext);
+    if (!context) {
+        throw new Error('useContextMenu must be used within a ContextMenuProvider');
+    }
+    return context;
+};
+
+export default ContextMenuProvider;

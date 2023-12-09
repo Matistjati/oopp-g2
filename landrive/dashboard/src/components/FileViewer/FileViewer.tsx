@@ -6,7 +6,7 @@ import FileRow from './components/FileRow/FileRow'
 import BackButton from '../BackButton/BackButton.tsx'
 import FileUploadButton from '../FileUploadButton/FileUploadButton.tsx'
 import ProgressBox from '../ProgressBox/ProgressBox.tsx'
-import {Filter, applyFilter, emptyFilter} from "../../lib/interface/Filter.tsx";
+import {Filter, applyFilter} from "../../lib/interface/Filter.tsx";
 
 interface Props {
     selectedServer: ServerInfo | null
