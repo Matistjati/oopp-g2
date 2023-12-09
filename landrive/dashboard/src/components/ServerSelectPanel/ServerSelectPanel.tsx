@@ -2,8 +2,13 @@ import { useState, useEffect } from 'react';
 import RefreshButton from '../RefreshButton/RefreshButton';
 import { fetchFileServerList } from '../../lib/api';
 import ServerSelectPanelEntry from './components/ServerSelectPanelEntry/ServerSelectPanelEntry.tsx';
+import './ServerSelectPanel.css'
 
-function ServerSelectPanel({selectServer}: any) {
+interface Props {
+    selectServer: (serverInfo: ServerInfo) => void
+}
+
+function ServerSelectPanel({selectServer}: Props) {
     const [serverList, setServerList] = useState<Array<ServerInfo>>([]);
 
     useEffect(() => {
@@ -27,8 +32,8 @@ function ServerSelectPanel({selectServer}: any) {
     ));
 
     return (
-        <div style={{ alignItems: 'center' }} className='panel flex-column radius-medium background-2 padding-big' id='server-select-panel'>
-            <div className='flex-row gap-small' style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <div className='panel' id='server-select-panel'>
+            <div className='server-select-panel-top'>
                 <span>Available storage units</span>
                 <RefreshButton onClick={handleRefresh} />
             </div>

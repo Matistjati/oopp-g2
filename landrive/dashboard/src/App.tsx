@@ -1,7 +1,7 @@
 import './App.css'
 import {ChangeEvent, ChangeEventHandler, useState} from 'react'
 import InputBar from './components/InputBar/InputBar'
-import FileViewer from './components/FileViewer/FileViewer'
+import FileBrowser from './components/FileBrowser/FileBrowser.tsx'
 import ServerSelectPanel from './components/ServerSelectPanel/ServerSelectPanel'
 import {ContextMenuProvider} from './components/ContextMenu/ContextMenu.tsx'
 import {emptyFilter, Filter} from './lib/interface/Filter.tsx'
@@ -24,24 +24,23 @@ function App() {
         setFilter({...filter, extQuery: event.target.value})
     }
 
-  return (
-    <>
-      <ContextMenuProvider>
-        <div className='flex-row gap-medium padding-big background-1 text-1' style={{height: '100%', width: '100%', overflow: 'auto'}}>
-          <ServerSelectPanel selectServer={selectServer} />
-          <div className='flex-column gap-medium' style={{height: '100vh', flexGrow: '1'}}>
-            <div className='flex-row panel radius-medium gap-medium' id='filter-panel'>
-              <InputBar placeholder="Search" style={{width: '40rem'}} onChange={onChangeSearchBar}/>
-              <InputBar placeholder=".ext" onChange={onChangeExtBar}/>
-            </div>
-            <div className='panel radius-medium background-2 padding-medium' id='file-browser-panel'>
-              <FileViewer selectedServer={selectedServer} currentDirectory={currentDirectory} setCurrentDirectory={setCurrentDirectory} filter={filter} />
-            </div>
-          </div>
-        </div>
-      </ContextMenuProvider>
-    </>
-  )
+    return (
+        <>
+            <ContextMenuProvider>
+                <div id='app' className='gap-medium'>
+                    <ServerSelectPanel selectServer={selectServer}/>
+                    <div id='browser-container' className='gap-medium panel' style={{flexGrow: '1'}}>
+                        <div className='filter-bar' id=''>
+                            <InputBar placeholder="Search" style={{width: '40rem'}} onChange={onChangeSearchBar}/>
+                            <InputBar placeholder=".ext" onChange={onChangeExtBar}/>
+                        </div>
+                        <FileBrowser selectedServer={selectedServer} currentDirectory={currentDirectory}
+                                     setCurrentDirectory={setCurrentDirectory} filter={filter}/>
+                    </div>
+                </div>
+            </ContextMenuProvider>
+        </>
+    )
 }
 
 export default App

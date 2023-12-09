@@ -1,5 +1,5 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
-import './FileViewer.css'
+import './FileBrowser.css'
 import RefreshButton from '../RefreshButton/RefreshButton'
 import {fetchFileList, uploadFile} from '../../lib/api'
 import FileRow from './components/FileRow/FileRow'
@@ -7,6 +7,8 @@ import BackButton from '../BackButton/BackButton.tsx'
 import FileUploadButton from '../FileUploadButton/FileUploadButton.tsx'
 import ProgressBox from '../ProgressBox/ProgressBox.tsx'
 import {Filter, applyFilter} from "../../lib/interface/Filter.tsx";
+import DirectoryBar from "./components/DirectoryBar/DirectoryBar.tsx";
+import serverSelectPanelEntry from "../ServerSelectPanel/components/ServerSelectPanelEntry/ServerSelectPanelEntry.tsx";
 
 interface Props {
     selectedServer: ServerInfo | null
@@ -15,7 +17,7 @@ interface Props {
     filter: Filter
 }
 
-function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filter}: Props) {
+function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, filter}: Props) {
     const [progressing, setProgressing] = useState<ProgressInfo[]>([])
     const [fsDirectoryList, setFsDirectoryList] = useState<FsDirectoryList>({files: [], dirs: []})
     const [filteredFileList, setFilteredFileList] = useState<FsEntryInfo[]>([])
@@ -83,6 +85,7 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
                 name={file.name}
                 date={file.date}
                 size={file.size}
+                type={"file"}
                 onClick={() => {
                     window.location.href = `http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(currentDirectory.join('/'))}`;
                 }}
@@ -96,6 +99,7 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
                 name={dir.name}
                 date={dir.date}
                 size={dir.size}
+                type={"folder"}
                 onClick={() => setCurrentDirectory(prevState => prevState.concat(dir.name))}
             />
         ))
@@ -107,24 +111,29 @@ function FileViewer({selectedServer, currentDirectory, setCurrentDirectory, filt
         progressing.map(progress => <ProgressBox key={progress.name} progress={progress}/>)
 
     return (
-        <div>
-            <FileUploadButton onFileUpload={handleFileUpload}/>
-            <RefreshButton onClick={handleRefresh}/>
-            <BackButton onClick={handleBack}/>
-            <table style={{width: '100%'}}>
-                <tbody>
-                <tr>
-                    <td></td>
-                    <td>Name</td>
-                    <td>Date</td>
-                    <td>Size</td>
-                </tr>
-                {dirRows.concat(fileRows)}
-                </tbody>
-            </table>
+        <div id='file-browser'>
+            <div id='file-browser-buttons'>
+                <BackButton onClick={handleBack}/>
+                <RefreshButton onClick={handleRefresh}/>
+                <FileUploadButton onFileUpload={handleFileUpload}/>
+            </div>
+            <DirectoryBar selectedServer={selectedServer} currentDirectory={currentDirectory} setCurrentDirectory={setCurrentDirectory}/>
+            <div id='file-row-container'>
+                <table style={{width: '100%'}}>
+                    <tbody>
+                    <tr>
+                        <td style={{width: '4.5rem'}}></td>
+                        <td style={{width: '50rem'}}>Name</td>
+                        <td style={{width: '20rem'}}>Date</td>
+                        <td>Size</td>
+                    </tr>
+                    {dirRows.concat(fileRows)}
+                    </tbody>
+                </table>
+            </div>
             <div className={'progress-box-container gap-medium'}>{renderProgressBoxes()}</div>
         </div>
     )
 }
 
-export default FileViewer
+export default FileBrowser

@@ -1,10 +1,7 @@
 import React, {
     useState,
     ReactNode,
-    MouseEvent,
     useEffect,
-    Dispatch,
-    SetStateAction,
     createContext,
     useContext
 } from 'react';

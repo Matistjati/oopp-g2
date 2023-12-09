@@ -1,81 +1,55 @@
 @font-face {
-  font-family: 'Archivo';
-  src: url(./assets/fonts/Archivo-Regular.ttf);
+    font-family: 'Archivo';
+    src: url(./assets/fonts/Archivo-Regular.ttf);
 }
 
 @font-face {
-  font-family: 'Noto Sans';
-  src: url(./assets/fonts/NotoSans-Regular.ttf);
+    font-family: 'Noto Sans';
+    src: url(./assets/fonts/NotoSans-Regular.ttf);
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 #root {
-  height: 100%;
-  width: 100%;
-  font-family: 'Noto Sans';
+    height: 100%;
+    width: 100%;
+    font-family: 'Noto Sans', sans-serif;
+    color: var(--text-color-1);
 }
 
 input, button {
-  all: unset;
+    all: unset;
 }
 
 button {
-  cursor: pointer;
-}
-
-.flex-row {
-  display: flex;
-  flex-direction: row;
-}
-
-.flex-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.gap-small {
-  gap: .3rem;
-}
-
-.gap-medium {
-  gap: .7rem;
+    cursor: pointer;
 }
 
 .panel {
-
+    padding: 1.5rem;
+    border-radius: 0rem;
+    background-color: var(--bg-color-2);
 }
 
-.padding-medium {
-  padding: .7rem;
+.gap-medium {
+    gap: .7rem;
 }
 
-.padding-big {
-  padding: 1.2rem;
+.basic-button {
+    background-color: var(--basic-button-bg-color);
+    padding: .5rem;
+    border: 1px solid var(--input-border-color);
 }
 
-.radius-medium {
-  border-radius: 0rem;
-}
-
-.background-1 {
-  background-color: #000;
-}
-
-.background-2 {
-  background-color: #202020;
-}
-
-.background-3 {
-  background-color: #191919;
-}
-
-.background-4 {
-  background-color: white;
-}
-
-.text-1 {
-  color: #fff
+:root {
+    --text-color-1: #5b5b5b;
+    --bg-color-1: #f3f3f3;
+    --bg-color-2: #fff;
+    --input-bg-color: #f5f5f5;
+    --input-border-color: #eeeeee;
+    --file-row-bg-color: #eeeeee;
+    --basic-button-bg-color: #f5f5f5;
+    --icon-color: #5b5b5b;
 }

@@ -1,0 +1,7 @@
+.file-upload-button-label {
+    cursor: pointer;
+}
+
+.file-upload-button {
+    display: none;
+}

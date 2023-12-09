@@ -1,0 +1,13 @@
+#server-select-panel {
+    width: 20rem;
+}
+
+.server-select-panel-top {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    border-bottom: 1px solid var(--input-border-color);
+    padding: .5rem;
+    justify-content: center;
+    margin-bottom: .5rem;
+}

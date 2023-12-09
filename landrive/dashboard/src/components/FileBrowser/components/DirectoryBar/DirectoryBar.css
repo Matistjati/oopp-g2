@@ -1,0 +1,12 @@
+.directory-bar {
+    height: 2rem;
+    background-color: var(--bg-color-1);
+    margin-top: .3rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem;
+    gap: 1rem;
+    border: 1px solid var(--input-border-color);
+}

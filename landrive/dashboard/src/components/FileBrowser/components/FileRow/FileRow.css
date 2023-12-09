@@ -1,0 +1,15 @@
+.file-row {
+    width: 100%;
+}
+
+.file-row:hover {
+    background-color: var(--file-row-bg-color)
+}
+
+.file-name {
+    /*width: 40rem;*/
+}
+
+.file-date, .file-size {
+    /*width: 10rem;*/
+}
