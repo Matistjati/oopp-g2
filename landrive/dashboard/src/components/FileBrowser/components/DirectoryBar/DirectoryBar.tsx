@@ -24,7 +24,7 @@ function DirectoryBar({selectedServer, currentDirectory, setCurrentDirectory}: P
                         maskImage: `url(${RightArrow})`
                     }}></div>
                     <button onClick={() => {
-                        setCurrentDirectory(currentDirectory.slice(idx))
+                        setCurrentDirectory(currentDirectory.slice(0, idx + 1))
                     }}>
                         {dir}
                     </button>
