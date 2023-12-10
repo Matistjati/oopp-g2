@@ -13,6 +13,7 @@ import landrive.fileserver.filesystem.FsService;
 import landrive.fileserver.handler.filedownload.FileDownloadHandlers;
 import landrive.fileserver.handler.filelist.FileListHandlers;
 import landrive.fileserver.handler.fileupload.FileUploadHandlers;
+import landrive.fileserver.handler.rename.RenameHandlers;
 import landrive.lib.cli.command.Command;
 import landrive.lib.route.MountingHandlers;
 import landrive.lib.server.ServerInfo;
@@ -21,8 +22,6 @@ public final class FileServer extends AbstractVerticle {
     private final String name;
     private final SocketAddress socketAddress;
     private final SocketAddress webServerSocketAddress;
-    private FsService fsService;
-    private HttpServer httpServer;
     private WebClient client;
 
     public FileServer(final Config config) {
@@ -33,14 +32,15 @@ public final class FileServer extends AbstractVerticle {
 
     @Override
     public void start() {
-        this.fsService = new FsService(this.vertx.fileSystem(), "storage");
+        final FsService fsService = new FsService(this.vertx.fileSystem(), "storage");
         final Router router = Router.router(this.vertx);
         MountingHandlers.mountAll(router,
-                new FileDownloadHandlers(this.fsService),
-                new FileUploadHandlers(this.fsService),
-                new FileListHandlers(this.fsService)
+                new FileDownloadHandlers(fsService),
+                new FileUploadHandlers(fsService),
+                new FileListHandlers(fsService),
+                new RenameHandlers(fsService)
         );
-        this.httpServer = this.vertx.createHttpServer().requestHandler(router);
+        HttpServer httpServer = this.vertx.createHttpServer().requestHandler(router);
         WebClientOptions clientOptions = new WebClientOptions()
                 .setDefaultHost(webServerSocketAddress.host())
                 .setDefaultPort(webServerSocketAddress.port());

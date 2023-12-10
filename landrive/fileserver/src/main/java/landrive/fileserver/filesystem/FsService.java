@@ -140,4 +140,19 @@ public class FsService {
         }
         return fileUpload.streamToFileSystem(filePath.toString());
     }
+
+    public Future<Void> renameFile(String path, String newName) {
+        final Path filePath = this.storageRoot.resolve(path);
+        if (!validPath(filePath)) {
+            return Future.failedFuture(new IllegalAccessException("Path is not valid."));
+        }
+        try {
+            final Path newPath = filePath.resolveSibling(newName);
+            Files.move(filePath, newPath);
+        }
+        catch (Throwable e) {
+            return Future.failedFuture(e);
+        }
+        return Future.succeededFuture();
+    }
 }

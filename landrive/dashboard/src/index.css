@@ -31,6 +31,7 @@ button {
     padding: 1.5rem;
     border-radius: 0rem;
     background-color: var(--bg-color-2);
+    border: 1px solid var(--input-border-color);
 }
 
 .gap-medium {
@@ -43,13 +44,20 @@ button {
     border: 1px solid var(--input-border-color);
 }
 
+.inner-modal-container {
+    background-color: var(--bg-color-1);
+    border: 1px solid var(--input-border-color);
+}
+
 :root {
     --text-color-1: #5b5b5b;
     --bg-color-1: #f3f3f3;
     --bg-color-2: #fff;
     --input-bg-color: #f5f5f5;
-    --input-border-color: #eeeeee;
+    --input-border-color: #dadada;
     --file-row-bg-color: #eeeeee;
     --basic-button-bg-color: #f5f5f5;
     --icon-color: #5b5b5b;
+    --progress-bar-color: #88ff79;
+    --modal-bg: rgba(68, 68, 68, 0.58)
 }

@@ -15,14 +15,14 @@ async function fetchFileServerList(): Promise<Array<ServerInfo>> {
         })
 }
 
-function createRequestUrl(socketAddress: SocketAddress, endpoint: string) : string {
+function createRequestUrl(socketAddress: SocketAddress, endpoint: string): string {
     return encodeURI(`http://${socketAddress.hostname}:${socketAddress.port}${endpoint}`)
 }
 
-async function fetchFileList(server: ServerInfo, directory: Array<string>): Promise<FsDirectoryList> {
+async function fetchFileList(server: ServerInfo, dir: Array<string>): Promise<FsDirectoryList> {
     const requestUrl = createRequestUrl(
         server.socketAddress,
-        `/api/fileList/${directory.join('/')}`
+        `/api/fileList/${dir.join('/')}`
     )
     return fetch(requestUrl, {
         method: "GET"
@@ -32,6 +32,28 @@ async function fetchFileList(server: ServerInfo, directory: Array<string>): Prom
                 throw new Error();
             }
             return response.json();
+        })
+        .catch(error => {
+            throw error;
+        })
+}
+
+async function renameFile(file: FsEntryInfo, server: ServerInfo | null, dir: Array<string>, newName: string): Promise<void> {
+    const requestUrl = createRequestUrl(
+        server.socketAddress,
+        `/api/renameFile/${dir.concat(file.name).join('/')}`
+    )
+    return fetch(requestUrl, {
+        method: "POST",
+        body: JSON.stringify(newName),
+        headers : {
+            'Content-Type' : 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error();
+            }
         })
         .catch(error => {
             throw error;
@@ -65,7 +87,7 @@ async function uploadFile(file: File, server: ServerInfo | null, dir: Array<stri
                 'Content-Type': 'multipart/form-data'
             },
             onUploadProgress: (progressEvent) => {
-                const { loaded, total } = progressEvent;
+                const {loaded, total} = progressEvent;
                 if (total != undefined && total != 0) {
                     let progress = loaded / total;
                     updateProgress(progress)
@@ -81,4 +103,8 @@ async function uploadFile(file: File, server: ServerInfo | null, dir: Array<stri
     });
 }
 
-export { fetchFileServerList, fetchFileList, uploadFile };
+function downloadFile(file: FsEntryInfo, dir: string[]) {
+    window.location.href = `http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(dir.join('/'))}`;
+}
+
+export {fetchFileServerList, fetchFileList, uploadFile, downloadFile, renameFile};

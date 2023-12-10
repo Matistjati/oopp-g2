@@ -1,14 +1,15 @@
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
+import React, {Dispatch, SetStateAction, useContext, useEffect, useState} from 'react'
 import './FileBrowser.css'
 import RefreshButton from '../RefreshButton/RefreshButton'
-import {fetchFileList, uploadFile} from '../../lib/api'
+import {downloadFile, fetchFileList, uploadFile} from '../../lib/api'
 import FileRow from './components/FileRow/FileRow'
 import BackButton from '../BackButton/BackButton.tsx'
 import FileUploadButton from '../FileUploadButton/FileUploadButton.tsx'
 import ProgressBox from '../ProgressBox/ProgressBox.tsx'
 import {Filter, applyFilter} from "../../lib/interface/Filter.tsx";
 import DirectoryBar from "./components/DirectoryBar/DirectoryBar.tsx";
-import serverSelectPanelEntry from "../ServerSelectPanel/components/ServerSelectPanelEntry/ServerSelectPanelEntry.tsx";
+import {ModalConsumer, ModalContext} from "../Modal/Modal.tsx";
+import RenameFileModal from "../RenameFileModal/RenameFileModal.tsx";
 
 interface Props {
     selectedServer: ServerInfo | null
@@ -23,6 +24,8 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
     const [filteredFileList, setFilteredFileList] = useState<FsEntryInfo[]>([])
     const [filteredDirList, setFilteredDirList] = useState<FsEntryInfo[]>([])
     const [uploadCount, setUploadCount] = useState<number>(0)
+
+    const modalState = useContext(ModalContext);
 
     const handleRefresh = () => {
         if (!selectedServer) return
@@ -79,6 +82,15 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
             })
     }
 
+    const renameHandler = (file: FsEntryInfo) => {
+        modalState.openModal(<RenameFileModal
+            file={file}
+            server={selectedServer}
+            dir={currentDirectory}
+            closeModal={modalState.closeModal}
+            handleRefresh={handleRefresh} />)
+    }
+
     const renderFileRows = (files: FsEntryInfo[]) =>
         files.map(file => (
             <FileRow
@@ -86,8 +98,15 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
                 date={file.date}
                 size={file.size}
                 type={"file"}
+                downloadHandler={() => {
+                    downloadFile(file, currentDirectory)
+                }}
+                deleteHandler={() => {
+
+                }}
+                renameHandler={() => {renameHandler(file)}}
                 onClick={() => {
-                    window.location.href = `http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(currentDirectory.join('/'))}`;
+
                 }}
             />
         ))
@@ -100,6 +119,15 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
                 date={dir.date}
                 size={dir.size}
                 type={"folder"}
+                downloadHandler={() => {
+
+                }}
+                deleteHandler={() => {
+
+                }}
+                renameHandler={() => {
+
+                }}
                 onClick={() => setCurrentDirectory(prevState => prevState.concat(dir.name))}
             />
         ))
@@ -128,6 +156,7 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
                         <td>Size</td>
                     </tr>
                     {dirRows.concat(fileRows)}
+                    {/* <FileRow name={"test.png"} date={"2023-11-05"} size={1000} type={"file"} onClick={() => {}} /> */}
                     </tbody>
                 </table>
             </div>

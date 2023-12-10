@@ -6,12 +6,12 @@ interface Props {
 
 function ProgressBox({progress}: Props) {
     return (
-        <div className={'progress-box background-3 flex-column'} style={{justifyContent: 'flex-start'}}>
+        <div className={'progress-box'}>
             <div className={'text'}>
                 {progress.action}: <br/> {progress.name}
             </div>
-            <div className={'progress-bar-background background-2'}>
-                <div className={'progress-bar background-4'} style={{width: `${progress.progress * 100}%`}}></div>
+            <div className={'progress-bar-background'}>
+                <div className={'progress-bar'} style={{width: `${progress.progress * 100}%`}}></div>
             </div>
         </div>
     )

@@ -19,15 +19,20 @@ interface Props {
     date: string,
     size: number,
     type: string,
-    onClick: MouseEventHandler<HTMLElement>,
+    downloadHandler: () => void,
+    renameHandler: () => void,
+    deleteHandler: () => void,
+    onClick: MouseEventHandler<HTMLElement>
 }
 
-function FileRow({name, date, size, type, onClick}: Props) {
+function FileRow({name, date, size, type, downloadHandler, renameHandler, deleteHandler, onClick}: Props) {
     const { showContextMenu } = useContextMenu();
 
     function enableContextMenu(event: React.MouseEvent, name: string) {
         const menu = []
-        menu.push(["Download", ()=>{console.log("Downloaded"+name)}])
+        menu.push(["Download", downloadHandler])
+        menu.push(["Rename", renameHandler])
+        menu.push(["Delete", deleteHandler])
         showContextMenu(event, menu);
     }
 

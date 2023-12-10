@@ -5,6 +5,7 @@ import FileBrowser from './components/FileBrowser/FileBrowser.tsx'
 import ServerSelectPanel from './components/ServerSelectPanel/ServerSelectPanel'
 import {ContextMenuProvider} from './components/ContextMenu/ContextMenu.tsx'
 import {emptyFilter, Filter} from './lib/interface/Filter.tsx'
+import {ModalProvider} from "./components/Modal/Modal.tsx";
 
 function App() {
     const [selectedServer, setSelectedServer] = useState<ServerInfo | null>(null);
@@ -26,19 +27,21 @@ function App() {
 
     return (
         <>
-            <ContextMenuProvider>
-                <div id='app' className='gap-medium'>
-                    <ServerSelectPanel selectServer={selectServer}/>
-                    <div id='browser-container' className='gap-medium panel' style={{flexGrow: '1'}}>
-                        <div className='filter-bar' id=''>
-                            <InputBar placeholder="Search" style={{width: '40rem'}} onChange={onChangeSearchBar}/>
-                            <InputBar placeholder=".ext" onChange={onChangeExtBar}/>
+            <ModalProvider>
+                <ContextMenuProvider>
+                    <div id='app' className='gap-medium'>
+                        <ServerSelectPanel selectServer={selectServer}/>
+                        <div id='browser-container' className='gap-medium panel' style={{flexGrow: '1'}}>
+                            <div className='filter-bar' id=''>
+                                <InputBar placeholder="Search" style={{width: '40rem'}} onChange={onChangeSearchBar}/>
+                                <InputBar placeholder=".ext" onChange={onChangeExtBar}/>
+                            </div>
+                            <FileBrowser selectedServer={selectedServer} currentDirectory={currentDirectory}
+                                         setCurrentDirectory={setCurrentDirectory} filter={filter}/>
                         </div>
-                        <FileBrowser selectedServer={selectedServer} currentDirectory={currentDirectory}
-                                     setCurrentDirectory={setCurrentDirectory} filter={filter}/>
                     </div>
-                </div>
-            </ContextMenuProvider>
+                </ContextMenuProvider>
+            </ModalProvider>
         </>
     )
 }

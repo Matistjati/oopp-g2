@@ -10,13 +10,17 @@
     max-width: 15rem;
     padding: 1rem;
     font-size: .9rem;
+    background-color: var(--bg-color-2);
+    border: 1px solid var(--input-border-color);
 }
 
 .progress-bar {
     height: 100%;
+    background-color: var(--progress-bar-color);
 }
 
 .progress-bar-background {
     height: .25rem;
     width: 100%;
+    background-color: var(--input-bg-color);
 }

@@ -1,6 +1,6 @@
 .directory-bar {
     height: 2rem;
-    background-color: var(--bg-color-1);
+    background-color: var(--input-bg-color);
     margin-top: .3rem;
     margin-bottom: 1rem;
     display: flex;

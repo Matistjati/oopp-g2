@@ -31,7 +31,7 @@ export const ContextMenuProvider: React.FC<ContextMenuProviderProps> = ({ childr
         e.preventDefault();
 
         const menu = items.map((item:any, index:number) => (
-            <div key={index} className="contextmenu-item" onClick={() => item[1]()}>
+            <div key={index} className="context-menu-item" onClick={() => item[1]()}>
                 {item[0]}
             </div>
         ));
@@ -69,14 +69,11 @@ export const ContextMenuProvider: React.FC<ContextMenuProviderProps> = ({ childr
             {children}
             {contextMenuPosition && (
                 <div
+                    className='context-menu'
                     style={{
                         position: 'fixed',
                         top: contextMenuPosition.top,
-                        left: contextMenuPosition.left,
-                        backgroundColor: '#fff',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                        borderRadius: '20px',
-                        overflow: 'hidden',
+                        left: contextMenuPosition.left
                     }}
                     onClick={closeContextMenu}
                 >

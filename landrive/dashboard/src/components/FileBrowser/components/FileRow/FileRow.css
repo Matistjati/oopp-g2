@@ -1,5 +1,6 @@
 .file-row {
     width: 100%;
+    border: 1px solid var(--input-border-color);
 }
 
 .file-row:hover {
