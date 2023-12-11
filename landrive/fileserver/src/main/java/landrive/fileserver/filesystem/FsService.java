@@ -163,7 +163,7 @@ public class FsService {
         if (!validPath(filePath)) {
             return Future.failedFuture(new IllegalAccessException("Path is not valid."));
         }
-        
+
         // Check if the folder already exists
         Path newFolderPath = filePath.resolve(folderName);
         if (Files.exists(newFolderPath)) {

@@ -29,6 +29,9 @@ export const ContextMenuProvider: React.FC<ContextMenuProviderProps> = ({ childr
 
     const showContextMenu = (e: React.MouseEvent, items: any) => {
         e.preventDefault();
+        e.stopPropagation(); // If not, it will also trigger parent oncontextmenu,
+        // which overrides everything here
+
 
         const menu = items.map((item:any, index:number) => (
             <div key={index} className="context-menu-item" onClick={() => item[1]()}>
