@@ -14,4 +14,4 @@ This is a Google drive like fileserver that you can run over lan on your network
 5. Run `connect` in the file server to connect it to the webserver.
 
 ## Web browser
-When all services are up you go to "localhost:8080/dashboard" to view the webpage.
+When all services are up you go to <http://localhost:8080/dashboard> to view the webpage.
