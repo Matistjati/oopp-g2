@@ -8,5 +8,6 @@ public class StaticHandlers implements MountingHandlers {
     @Override
     public void mount(Router router) {
         router.route("/dashboard/*").handler(StaticHandler.create("webfiles"));
+        router.route("/").handler(new IndexRedirection());
     }
 }
