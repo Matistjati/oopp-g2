@@ -4,11 +4,11 @@ This is a Google drive like fileserver that you can run over lan on your network
 # Installation Guide
 ## Frontend
 1. Download and install Node.
-2. Run the command `npm install` in /landrive/dashboard/.
+2. Run the command `npm install` in `/landrive/dashboard/`.
 
 ## Backend
 1. Download and install Gradle.
-2. Run `gradle installDist` in the '/landrive/' folder.
+2. Run `gradle installDist` in the `/landrive/`.
 3. Open a new terminal and run `runwebserver.bat` to start the webserver.
 4. Open a new terminal and run `runfileserver.bat` to start a file server.
 5. Run `connect` in the file server to connect it to the webserver.
