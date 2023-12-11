@@ -10,6 +10,7 @@ import io.vertx.uritemplate.UriTemplate;
 import io.vertx.uritemplate.Variables;
 import landrive.fileserver.config.Config;
 import landrive.fileserver.filesystem.FsService;
+import landrive.fileserver.handler.createfolder.CreateFolderHandlers;
 import landrive.fileserver.handler.filedownload.FileDownloadHandlers;
 import landrive.fileserver.handler.filelist.FileListHandlers;
 import landrive.fileserver.handler.fileupload.FileUploadHandlers;
@@ -38,7 +39,8 @@ public final class FileServer extends AbstractVerticle {
                 new FileDownloadHandlers(fsService),
                 new FileUploadHandlers(fsService),
                 new FileListHandlers(fsService),
-                new RenameHandlers(fsService)
+                new RenameHandlers(fsService),
+                new CreateFolderHandlers(fsService)
         );
         HttpServer httpServer = this.vertx.createHttpServer().requestHandler(router);
         WebClientOptions clientOptions = new WebClientOptions()

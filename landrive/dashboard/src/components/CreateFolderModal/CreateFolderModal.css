@@ -1,0 +1,15 @@
+.rename-file-modal, .rename-file-modal > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .7rem;
+}
+
+.rename-file-modal {
+    flex-direction: column;
+    padding: .7rem;
+}
+
+.rename-file-modal > div {
+    flex-direction: row;
+}
