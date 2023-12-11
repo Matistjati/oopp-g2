@@ -55,7 +55,12 @@ public class FsService {
     }
 
     private synchronized boolean tryAddReader(Path path) {
-        return false;
+        final SimpleLock lock = writerLocks.getOrDefault(path, new SimpleLock(false));
+        if (lock.isLocked()) {
+            return false;
+        }
+        activeReaders.put(path.toString(), activeReaders.getOrDefault(path, 0) + 1);
+        return true;
     }
 
     private synchronized void writerUnlock(final Path path) {
@@ -79,7 +84,7 @@ public class FsService {
 
     private synchronized boolean tryWriterLock(final File file) {
         final SimpleLock lock = writerLocks.getOrDefault(file.getPath(), new SimpleLock(false));
-        if (!lock.isLocked()) {
+        if (!lock.isLocked() && activeReaders.getOrDefault(file.getPath(), 0) == 0) {
             final File[] children = file.listFiles();
             if (children == null) {
                 lock.setLocked(true);
