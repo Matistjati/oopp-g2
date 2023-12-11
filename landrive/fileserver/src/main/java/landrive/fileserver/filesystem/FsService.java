@@ -155,4 +155,28 @@ public class FsService {
         }
         return Future.succeededFuture();
     }
+
+    public Future<Void> createFolder(String path, String folderName) {
+        // Check if the path is valid
+        if (folderName==null) return Future.failedFuture(new IllegalArgumentException("folderName is null"));
+        final Path filePath = this.storageRoot.resolve(path);
+        if (!validPath(filePath)) {
+            return Future.failedFuture(new IllegalAccessException("Path is not valid."));
+        }
+        
+        // Check if the folder already exists
+        Path newFolderPath = filePath.resolve(folderName);
+        if (Files.exists(newFolderPath)) {
+            return Future.succeededFuture(); // Folder already exists, no need to create
+        }
+
+        try {
+            // Create the folder
+            Files.createDirectories(newFolderPath);
+        } catch (Throwable e) {
+            return Future.failedFuture(e);
+        }
+
+        return Future.succeededFuture();
+    }
 }

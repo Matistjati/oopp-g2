@@ -10,6 +10,8 @@ import {Filter, applyFilter} from "../../lib/interface/Filter.tsx";
 import DirectoryBar from "./components/DirectoryBar/DirectoryBar.tsx";
 import {ModalConsumer, ModalContext} from "../Modal/Modal.tsx";
 import RenameFileModal from "../RenameFileModal/RenameFileModal.tsx";
+import CreateFolderModal from "../CreateFolderModal/CreateFolderModal.tsx";
+import {useContextMenu} from "../ContextMenu/ContextMenu.tsx";
 
 interface Props {
     selectedServer: ServerInfo | null
@@ -26,6 +28,8 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
     const [uploadCount, setUploadCount] = useState<number>(0)
 
     const modalState = useContext(ModalContext);
+
+    const { showContextMenu } = useContextMenu();
 
     const handleRefresh = () => {
         if (!selectedServer) return
@@ -91,6 +95,20 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
             handleRefresh={handleRefresh} />)
     }
 
+    const createFolderHandler = () => {
+        modalState.openModal(<CreateFolderModal
+            server={selectedServer}
+            dir={currentDirectory}
+            closeModal={modalState.closeModal}
+            handleRefresh={handleRefresh} />)
+    }
+
+    function enableContextMenu(event: React.MouseEvent) {
+        const menu = []
+        menu.push(["Create folder", createFolderHandler])
+        showContextMenu(event, menu);
+    }
+
     const renderFileRows = (files: FsEntryInfo[]) =>
         files.map(file => (
             <FileRow
@@ -146,7 +164,8 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
                 <FileUploadButton onFileUpload={handleFileUpload}/>
             </div>
             <DirectoryBar selectedServer={selectedServer} currentDirectory={currentDirectory} setCurrentDirectory={setCurrentDirectory}/>
-            <div id='file-row-container'>
+            <div id='file-row-container' onContextMenu=
+                {(event) => {enableContextMenu(event)}}>
                 <table style={{width: '100%'}}>
                     <tbody>
                     <tr>
