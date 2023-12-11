@@ -31,10 +31,11 @@ public class FsDirectoryList {
             final long lastModifiedTime = entry.lastModified();
             final Instant instant = Instant.ofEpochMilli(lastModifiedTime);
             final LocalDateTime lastModifiedDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+            long itemSize = entry.isDirectory()?getDirectorySize(entry):entry.length();
             FsEntryInfo entryInfo = new FsEntryInfo(
                     entry.getName(),
                     lastModifiedDateTime.format(formatter),
-                    entry.length()
+                    itemSize
             );
             if (entry.isDirectory()) {
                 dirs.add(entryInfo);
@@ -42,5 +43,23 @@ public class FsDirectoryList {
             }
             files.add(entryInfo);
         });
+    }
+
+    // Recursive method to calculate directory size
+    private long getDirectorySize(File directory) {
+        long size = 0;
+        File[] files = directory.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    size += getDirectorySize(file);
+                } else {
+                    size += file.length();
+                }
+            }
+        }
+
+        return size;
     }
 }
