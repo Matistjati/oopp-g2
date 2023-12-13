@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class FsFileLocker {
     private static class SimpleLock {
-        private boolean locked = false;
+        private boolean locked;
 
         public SimpleLock(final boolean locked) {
             this.locked = locked;
@@ -24,81 +24,62 @@ public class FsFileLocker {
         }
     }
 
-    private static class SimpleCounter {
-        private int count = 0;
-
-        public SimpleCounter(final int count) {
-            this.count = count;
-        }
-
-        public SimpleCounter() {}
-
-        public int getCount() {
-            return count;
-        }
-
-        public void increment() {
-            this.count ++;
-        }
-
-        public void decrement() {
-            this.count --;
-        }
-    }
-
     private final Map<String, Integer> activeReaders = new HashMap<>();
     private final Map<String, SimpleLock> writerLocks = new HashMap<>();
 
-    private synchronized boolean tryAddReader(Path path) {
-        return tryAddReader(path.toFile());
-    }
-
     private synchronized void releaseReader(final Path path) {
-        releaseReader(path.toFile());
+        this.releaseReader(path.toFile());
     }
 
     private synchronized void releaseReader(final File file) {
-        decrementReaderCount(file.toPath());
+        decrementReaderCount(file.getPath());
         final File[] children = file.listFiles();
-        for (File child : children) {
-            this.releaseReader(child);
+        if (children != null) {
+            for (File child : children) {
+                this.releaseReader(child);
+            }
         }
     }
 
+    private synchronized boolean tryAddReader(Path path) {
+        return this.tryAddReader(path.toFile());
+    }
+
     private synchronized boolean tryAddReader(final File file) {
-        if (hasWriter(file.toPath())) {
+        if (!this.hasWriter(file.getPath())) {
             final File[] children = file.listFiles();
             if (children == null) {
-                increaseReaderCount(file.toPath());
+                this.increaseReaderCount(file.getPath());
                 return true;
             }
             final List<File> lockedChildren = new ArrayList<>();
             for (final File child : children) {
                 if (!this.tryAddReader(child)) {
                     for (final File lockedChild : lockedChildren) {
-                        this.decrementReaderCount(lockedChild.toPath());
+                        this.decrementReaderCount(lockedChild.getPath());
                     }
                     return false;
                 }
                 lockedChildren.add(child);
             }
-            increaseReaderCount(file.toPath());
+            this.increaseReaderCount(file.getPath());
             return true;
         }
         return false;
     }
 
-    private synchronized boolean hasWriter(final Path path){
+    private synchronized void increaseReaderCount(final String path) {
+        activeReaders.put(path, activeReaders.getOrDefault(path, 0) + 1);
+    }
+
+    private synchronized void decrementReaderCount(final String path) {
+        activeReaders.put(path, activeReaders.getOrDefault(path, 0) - 1);
+    }
+
+    private synchronized boolean hasWriter(final String path){
         return writerLocks.getOrDefault(path, new SimpleLock(false)).isLocked();
     }
 
-    private synchronized void increaseReaderCount(final Path path){
-        activeReaders.put(path.toString(), activeReaders.getOrDefault(path, 0) + 1);
-    }
-
-    private synchronized void decrementReaderCount(final Path path) {
-        activeReaders.put(path.toString(), activeReaders.getOrDefault(path, 0) - 1);
-    }
     private synchronized void writerUnlock(final Path path) {
         this.writerUnlock(path.toFile());
     }
@@ -106,13 +87,15 @@ public class FsFileLocker {
     private synchronized void writerUnlock(final File file) {
         writerLocks.getOrDefault(file.getPath(), new SimpleLock(false)).setLocked(false);
         final File[] children = file.listFiles();
-        for (File child : children) {
-            this.releaseReader(child);
+        if (children != null) {
+            for (File child : children) {
+                this.releaseReader(child);
+            }
         }
     }
 
     private synchronized boolean tryWriterLock(final Path path) {
-        return tryWriterLock(path.toFile());
+        return this.tryWriterLock(path.toFile());
     }
 
     private synchronized boolean tryWriterLock(final File file) {
