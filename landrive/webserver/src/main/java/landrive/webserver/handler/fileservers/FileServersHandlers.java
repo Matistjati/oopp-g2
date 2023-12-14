@@ -15,6 +15,7 @@ public class FileServersHandlers implements MountingHandlers {
     public void mount(Router router) {
         router.get("/api/fileServers").handler(new ListFileServersHandler(this.registry));
         router.post("/api/fileServers").handler(new RegisterFileServerHandler(this.registry));
+        router.put("/api/fileServers/:name").handler(new UpdateFileServerHandler(this.registry));
         router.delete("/api/fileServers/:name").handler(new UnregisterFileServerHandler(this.registry));
     }
 }

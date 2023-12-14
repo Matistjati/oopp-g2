@@ -23,6 +23,12 @@ public class Registry {
         System.out.println("File server " + name + " unregistered.");
     }
 
+    public void rename(final String name, final ServerInfo serverInfo) {
+        registered.remove(name);
+        registered.put(serverInfo.name(), serverInfo);
+        System.out.println("File server " + name + " renamed to " + serverInfo.name() + ".");
+    }
+
     public List<ServerInfo> getFileServerList() {
         return this.registered.values().stream().sorted().toList();
     }

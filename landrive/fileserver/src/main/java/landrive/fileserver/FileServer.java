@@ -20,13 +20,15 @@ import landrive.lib.route.MountingHandlers;
 import landrive.lib.server.ServerInfo;
 
 public final class FileServer extends AbstractVerticle {
-    private final String name;
+    private String name;
     private final SocketAddress socketAddress;
     private final SocketAddress webServerSocketAddress;
     private WebClient client;
+    private Boolean connected;
 
     public FileServer(final Config config) {
         this.name = config.name();
+        this.connected = false;
         this.socketAddress = config.socketAddress();
         this.webServerSocketAddress = config.webServerSocketAddress();
     }
@@ -54,6 +56,7 @@ public final class FileServer extends AbstractVerticle {
 
     @Command(name = "stop")
     public void cmdStop() {
+        cmdDisconnect();
         vertx.close();
     }
 
@@ -64,6 +67,7 @@ public final class FileServer extends AbstractVerticle {
                 .sendJson(new ServerInfo(this.name, this.socketAddress))
                 .onSuccess(res -> {
                     System.out.println("Connected to web server successfully.");
+                    this.connected = true;
                 });
     }
 
@@ -76,6 +80,21 @@ public final class FileServer extends AbstractVerticle {
                 .send()
                 .onSuccess(res -> {
                     System.out.println("Disconnected from web server successfully.");
+                    this.connected = false;
                 });
+    }
+
+    @Command(name = "rename")
+    public void cmdRename(String newName) {
+        String oldName = this.name;
+        this.name = newName;
+        if (this.connected) {
+            this.client
+                    .put("/api/fileServers/" + oldName)
+                    .sendJson(new ServerInfo(this.name, this.socketAddress))
+                    .onSuccess(res -> {
+                        System.out.println("Changed name to " + newName);
+                    });
+        }
     }
 }
