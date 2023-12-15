@@ -1,11 +1,12 @@
-import landrive.fileserver.filesystem.FsFileLocker;
-import org.junit.jupiter.api.Test;
+package landrive.fileserver.filesystem;
 
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 
 public class FsFileLockerTest {
     private final Path path = Path.of("./");
+
     @Test
     public void tryWriterBlocksReader(){
         FsFileLocker locker = new FsFileLocker();
@@ -21,7 +22,7 @@ public class FsFileLockerTest {
     }
 
     @Test
-    public void tryWWritersBlockEachOther(){
+    public void tryWritersBlockEachOther(){
         FsFileLocker locker = new FsFileLocker();
         assert locker.tryWriterLock(path);
         assert !locker.tryWriterLock(path);
