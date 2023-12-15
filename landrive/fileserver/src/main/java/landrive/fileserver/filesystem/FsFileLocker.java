@@ -27,7 +27,7 @@ public class FsFileLocker {
     private final Map<String, Integer> activeReaders = new HashMap<>();
     private final Map<String, SimpleLock> writerLocks = new HashMap<>();
 
-    private synchronized void releaseReader(final Path path) {
+    public synchronized void releaseReader(final Path path) {
         this.releaseReader(path.toFile());
     }
 
@@ -41,7 +41,7 @@ public class FsFileLocker {
         }
     }
 
-    private synchronized boolean tryAddReader(Path path) {
+    public synchronized boolean tryAddReader(Path path) {
         return this.tryAddReader(path.toFile());
     }
 
@@ -80,7 +80,7 @@ public class FsFileLocker {
         return writerLocks.getOrDefault(path, new SimpleLock(false)).isLocked();
     }
 
-    private synchronized void writerUnlock(final Path path) {
+    public synchronized void writerUnlock(final Path path) {
         this.writerUnlock(path.toFile());
     }
 
@@ -94,7 +94,7 @@ public class FsFileLocker {
         }
     }
 
-    private synchronized boolean tryWriterLock(final Path path) {
+    public synchronized boolean tryWriterLock(final Path path) {
         return this.tryWriterLock(path.toFile());
     }
 
