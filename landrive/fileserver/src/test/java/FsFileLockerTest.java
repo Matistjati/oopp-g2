@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 
 public class FsFileLockerTest {
-    private final Path path = Path.of("./fileserver/src/test/java");
+    private final Path path = Path.of("./");
     @Test
     public void tryWriterBlocksReader(){
         FsFileLocker locker = new FsFileLocker();

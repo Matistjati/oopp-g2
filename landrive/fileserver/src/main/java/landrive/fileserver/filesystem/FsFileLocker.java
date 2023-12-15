@@ -89,7 +89,7 @@ public class FsFileLocker {
         final File[] children = file.listFiles();
         if (children != null) {
             for (File child : children) {
-                this.releaseReader(child);
+                this.writerUnlock(child);
             }
         }
     }
