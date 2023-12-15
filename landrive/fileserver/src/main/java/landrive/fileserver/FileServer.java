@@ -14,6 +14,7 @@ import landrive.fileserver.handler.createfolder.CreateFolderHandlers;
 import landrive.fileserver.handler.filedownload.FileDownloadHandlers;
 import landrive.fileserver.handler.filelist.FileListHandlers;
 import landrive.fileserver.handler.fileupload.FileUploadHandlers;
+import landrive.fileserver.handler.ping.PingHandlers;
 import landrive.fileserver.handler.rename.RenameHandlers;
 import landrive.lib.cli.command.Command;
 import landrive.lib.route.MountingHandlers;
@@ -42,7 +43,8 @@ public final class FileServer extends AbstractVerticle {
                 new FileUploadHandlers(fsService),
                 new FileListHandlers(fsService),
                 new RenameHandlers(fsService),
-                new CreateFolderHandlers(fsService)
+                new CreateFolderHandlers(fsService),
+                new PingHandlers()
         );
         HttpServer httpServer = this.vertx.createHttpServer().requestHandler(router);
         WebClientOptions clientOptions = new WebClientOptions()
@@ -56,7 +58,9 @@ public final class FileServer extends AbstractVerticle {
 
     @Command(name = "stop")
     public void cmdStop() {
-        cmdDisconnect();
+        if (connected){
+            cmdDisconnect();
+        }
         vertx.close();
     }
 
