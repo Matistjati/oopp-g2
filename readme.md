@@ -1,5 +1,5 @@
 # Project description
-This is a Google drive like fileserver that you can run over lan on your network to share files across several devices.
+This is a Google Drive-like filehosting solution for local area networks to share files across several computers.
 
 # Installation Guide
 ## Frontend
