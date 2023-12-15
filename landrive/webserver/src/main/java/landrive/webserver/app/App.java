@@ -22,9 +22,9 @@ public final class App {
         final WebServer webServer = new WebServer(config);
         final Cli cli = new Cli(webServer);
         final Vertx vertx = Vertx.vertx();
-        final FileServerPinger pinger = new FileServerPinger(webServer);
+        final FileServerPinger pinger = new FileServerPinger(webServer.registry);
         vertx.deployVerticle(webServer);
         vertx.deployVerticle(cli);
-        pinger.start();
+        vertx.setPeriodic(5000, pinger);
     }
 }

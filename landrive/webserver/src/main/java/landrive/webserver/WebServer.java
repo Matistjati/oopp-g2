@@ -15,7 +15,6 @@ import landrive.webserver.registry.Registry;
 public final class WebServer extends AbstractVerticle {
     private final SocketAddress socketAddress;
     public final Registry registry = new Registry();
-    public Boolean isRunning = true;
 
 
     public WebServer(final Config config) {
@@ -37,7 +36,6 @@ public final class WebServer extends AbstractVerticle {
 
     @Command(name = "stop")
     public void cmdStop() {
-        isRunning = false;
         this.vertx.close();
     }
 }
