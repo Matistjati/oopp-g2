@@ -122,10 +122,10 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
                 deleteHandler={() => {
 
                 }}
-                renameHandler={() => {renameHandler(file)}}
-                onClick={() => {
-
+                renameHandler={() => {
+                    renameHandler(file)
                 }}
+                onClick={() => {}}
             />
         ))
 
@@ -144,7 +144,7 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
 
                 }}
                 renameHandler={() => {
-
+                    renameHandler(dir)
                 }}
                 onClick={() => setCurrentDirectory(prevState => prevState.concat(dir.name))}
             />

@@ -30,7 +30,9 @@ function FileRow({name, date, size, type, downloadHandler, renameHandler, delete
 
     function enableContextMenu(event: React.MouseEvent, name: string) {
         const menu = []
-        menu.push(["Download", downloadHandler])
+        if (type == "file") {
+            menu.push(["Download", downloadHandler])
+        }
         menu.push(["Rename", renameHandler])
         menu.push(["Delete", deleteHandler])
         showContextMenu(event, menu);
