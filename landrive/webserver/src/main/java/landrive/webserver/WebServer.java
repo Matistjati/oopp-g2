@@ -5,7 +5,6 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.StaticHandler;
 import landrive.lib.cli.command.Command;
 import landrive.lib.route.MountingHandlers;
 import landrive.webserver.config.Config;
@@ -15,7 +14,9 @@ import landrive.webserver.registry.Registry;
 
 public final class WebServer extends AbstractVerticle {
     private final SocketAddress socketAddress;
-    private final Registry registry = new Registry();
+    public final Registry registry = new Registry();
+    public Boolean isRunning = true;
+
 
     public WebServer(final Config config) {
         this.socketAddress = config.socketAddress();
@@ -36,6 +37,7 @@ public final class WebServer extends AbstractVerticle {
 
     @Command(name = "stop")
     public void cmdStop() {
+        isRunning = false;
         this.vertx.close();
     }
 }
