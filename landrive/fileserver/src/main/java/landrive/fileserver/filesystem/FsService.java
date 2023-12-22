@@ -66,10 +66,28 @@ public class FsService {
 
     public Future<Void> uploadFile(final HttpServerFileUpload fileUpload, String dir) {
         final Path filePath = this.storageRoot.resolve(dir).resolve(fileUpload.filename());
+
         if (!validPath(filePath)) {
+            System.out.println("Path is not valid.");
             return Future.failedFuture(new IllegalAccessException("Path is not valid."));
         }
-        return fileUpload.streamToFileSystem(filePath.toString());
+
+        String filePathString = filePath.toString();
+
+        // If file already exist add number after name
+        if (Files.exists(filePath)) {
+            int to_add = 1;
+            String filePathWithoutExtension = filePathString.substring(0, filePathString.lastIndexOf('.'));
+            String fileExtension = filePathString.substring(filePathString.lastIndexOf('.'));
+            String to_try = filePathWithoutExtension + " (" + Integer.toString(to_add) + ")" + fileExtension;
+            while (Files.exists(Path.of(to_try))) {
+                to_add++;
+                to_try = filePathWithoutExtension + " (" + Integer.toString(to_add) + ")" + fileExtension;
+            }
+            filePathString = to_try;
+        }
+
+        return fileUpload.streamToFileSystem(filePathString);
     }
 
     public Future<Void> renameFile(String path, String newName) {
