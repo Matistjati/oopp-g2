@@ -5,15 +5,16 @@ import ServerSelectPanelEntry from './components/ServerSelectPanelEntry/ServerSe
 import './ServerSelectPanel.css'
 
 interface Props {
-    selectServer: (serverInfo: ServerInfo) => void
+    selectServer: (serverInfo: ServerInfo) => void,
+    refreshFileServerList: Boolean,
 }
 
-function ServerSelectPanel({selectServer}: Props) {
+function ServerSelectPanel({selectServer, refreshFileServerList}: Props) {
     const [serverList, setServerList] = useState<Array<ServerInfo>>([]);
 
     useEffect(() => {
-        handleRefresh()
-    }, []);
+        handleRefresh();
+    }, [refreshFileServerList]);
 
     const handleRefresh = () => {
         fetchFileServerList()
