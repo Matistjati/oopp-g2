@@ -15,8 +15,11 @@ public class RegisterFileServerHandler implements Handler<RoutingContext> {
     @Override
     public void handle(RoutingContext ctx) {
         final ServerInfo info = ctx.body().asPojo(ServerInfo.class);
+
         registry.register(info);
+
+        System.out.println("Registered file server with name '" + info.name() + "'.");
+
         ctx.response().setStatusCode(200).end();
-        System.out.println("Registered file server with name \"" + info.name() + "\".");
     }
 }

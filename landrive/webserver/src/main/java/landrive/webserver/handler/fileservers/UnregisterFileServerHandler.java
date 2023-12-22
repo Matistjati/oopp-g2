@@ -14,8 +14,11 @@ public class UnregisterFileServerHandler implements Handler<RoutingContext> {
     @Override
     public void handle(RoutingContext ctx) {
         final String name = ctx.pathParam("name");
+
         this.registry.unregister(name);
-        System.out.println("Unregistered file server with name \"" + name + "\".");
+        
+        System.out.println("Unregistered file server with name '" + name + "'.");
+
         ctx.response().setStatusCode(200).end();
     }
 }

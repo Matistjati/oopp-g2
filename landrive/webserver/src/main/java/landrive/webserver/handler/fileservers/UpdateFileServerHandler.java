@@ -16,8 +16,11 @@ public class UpdateFileServerHandler implements Handler<RoutingContext> {
     public void handle(RoutingContext ctx) {
         final String name = ctx.pathParam("name");
         final ServerInfo info = ctx.body().asPojo(ServerInfo.class);
+
         this.registry.rename(name, info);
-        System.out.println("Renamed file server with name \"" + name + "\".");
+        
+        System.out.println("Renamed file server with name '" + name + "' to '" + info.name() + "'.");
+
         ctx.response().setStatusCode(200).end();
     }
 }

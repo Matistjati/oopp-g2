@@ -1,7 +1,11 @@
 package landrive.webserver;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -14,11 +18,31 @@ import landrive.webserver.registry.Registry;
 
 public final class WebServer extends AbstractVerticle {
     private final SocketAddress socketAddress;
-    public final Registry registry = new Registry();
+    public final Registry registry;
 
-
-    public WebServer(final Config config) {
+    public WebServer(final Config config, Vertx vertx) {
         this.socketAddress = config.socketAddress();
+        registry = new Registry(vertx);
+    }
+
+    private void webSocketSetup(HttpServer httpServer) {
+        httpServer.webSocketHandler(webSocket -> {
+            vertx.eventBus().consumer("fileserver.register").handler((message) -> {
+                webSocketEventHandler(webSocket, "fileserver.register", message);
+            });
+            vertx.eventBus().consumer("fileserver.unregister").handler((message) -> {
+                webSocketEventHandler(webSocket, "fileserver.unregister", message);
+            });
+            vertx.eventBus().consumer("fileserver.rename").handler((message) -> {
+                webSocketEventHandler(webSocket, "fileserver.rename", message);
+            });
+        });
+    }
+
+    private void webSocketEventHandler(ServerWebSocket webSocket, String eventType, Message<Object> message) {
+        JsonObject messageData = new JsonObject(message.body().toString());
+        String eventData = new JsonObject().put("event", eventType).put("data", messageData).toString();
+        webSocket.writeTextMessage(eventData);
     }
 
     @Override
@@ -30,6 +54,7 @@ public final class WebServer extends AbstractVerticle {
                 new StaticHandlers()
         );
         final HttpServer httpServer = this.vertx.createHttpServer().requestHandler(router);
+        webSocketSetup(httpServer);
         httpServer.listen(this.socketAddress);
         System.out.println("Web server listening on " + this.socketAddress + ".");
     }

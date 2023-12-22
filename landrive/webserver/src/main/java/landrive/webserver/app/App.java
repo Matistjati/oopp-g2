@@ -19,9 +19,9 @@ public final class App {
                 Path.of("config.json"),
                 "default-config.json"
         );
-        final WebServer webServer = new WebServer(config);
-        final Cli cli = new Cli(webServer);
         final Vertx vertx = Vertx.vertx();
+        final WebServer webServer = new WebServer(config, vertx);
+        final Cli cli = new Cli(webServer);
         final FileServerPinger pinger = new FileServerPinger(webServer.registry);
         vertx.deployVerticle(webServer);
         vertx.deployVerticle(cli);

@@ -58,14 +58,14 @@ public final class FileServer extends AbstractVerticle {
 
     @Command(name = "stop")
     public void cmdStop() {
-        if (connected){
-            cmdDisconnect();
-        }
+        if (this.connected) cmdDisconnect();
         vertx.close();
     }
 
     @Command(name = "connect")
     public void cmdConnect() {
+        if (this.connected) return;
+        
         this.client
                 .post("/api/fileServers")
                 .sendJson(new ServerInfo(this.name, this.socketAddress))
@@ -77,6 +77,8 @@ public final class FileServer extends AbstractVerticle {
 
     @Command(name = "disconnect")
     public void cmdDisconnect() {
+        if (!this.connected) return;
+
         final UriTemplate uritemplate = UriTemplate.of("/api/fileServers/{name}");
         final String requestUri = uritemplate.expandToString(Variables.variables().set("name", this.name));
         this.client
@@ -92,13 +94,16 @@ public final class FileServer extends AbstractVerticle {
     public void cmdRename(String newName) {
         String oldName = this.name;
         this.name = newName;
-        if (this.connected) {
-            this.client
-                    .put("/api/fileServers/" + oldName)
-                    .sendJson(new ServerInfo(this.name, this.socketAddress))
-                    .onSuccess(res -> {
-                        System.out.println("Changed name to " + newName);
-                    });
-        }
+        
+        if (!this.connected) return;
+
+        final UriTemplate uritemplate = UriTemplate.of("/api/fileServers/{name}");
+        final String requestUri = uritemplate.expandToString(Variables.variables().set("name", oldName));
+        this.client
+                .put(requestUri)
+                .sendJson(new ServerInfo(this.name, this.socketAddress))
+                .onSuccess(res -> {
+                    System.out.println("Changed name to " + newName);
+                });
     }
 }
