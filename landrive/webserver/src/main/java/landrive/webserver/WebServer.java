@@ -3,7 +3,6 @@ package landrive.webserver;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.ext.web.Router;
@@ -27,20 +26,18 @@ public final class WebServer extends AbstractVerticle {
     private void webSocketSetup(HttpServer httpServer) {
         httpServer.webSocketHandler(webSocket -> {
             vertx.eventBus().consumer("fileserver.register").handler((message) -> {
-                webSocketEventHandler(webSocket);
+                String eventData = new JsonObject().put("event", "fileservers.update").put("data", "").toString();
+                webSocket.writeTextMessage(eventData);
             });
             vertx.eventBus().consumer("fileserver.unregister").handler((message) -> {
-                webSocketEventHandler(webSocket);
+                String eventData = new JsonObject().put("event", "fileservers.update").put("data", "").toString();
+                webSocket.writeTextMessage(eventData);
             });
             vertx.eventBus().consumer("fileserver.rename").handler((message) -> {
-                webSocketEventHandler(webSocket);
+                String eventData = new JsonObject().put("event", "fileservers.update").put("data", "").toString();
+                webSocket.writeTextMessage(eventData);
             });
         });
-    }
-
-    private void webSocketEventHandler(ServerWebSocket webSocket) {
-        String eventData = new JsonObject().put("event", "fileservers.update").put("data", "").toString();
-        webSocket.writeTextMessage(eventData);
     }
 
     @Override
