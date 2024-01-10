@@ -16,7 +16,7 @@ async function fetchFileServerList(): Promise<Array<ServerInfo>> {
 }
 
 function createRequestUrl(socketAddress: SocketAddress, endpoint: string): string {
-    return encodeURI(`http://${socketAddress.hostname}:${socketAddress.port}${endpoint}`)
+    return encodeURI(`http://${socketAddress.host}:${socketAddress.port}${endpoint}`)
 }
 
 async function fetchFileList(server: ServerInfo, dir: Array<string>): Promise<FsDirectoryList> {
@@ -60,14 +60,14 @@ async function renameFile(file: FsEntryInfo, server: ServerInfo | null, dir: Arr
         })
 }
 
-async function createFolder(server: ServerInfo | null, dir: Array<string>, newName: string): Promise<void> {
+async function createFolder(server: ServerInfo | null, dir: Array<string>, name: string): Promise<void> {
     const requestUrl = createRequestUrl(
         server.socketAddress,
         `/api/createFolder/${dir.join('/')}`
     )
     return fetch(requestUrl, {
         method: "POST",
-        body: JSON.stringify(newName),
+        body: JSON.stringify(name),
         headers : {
             'Content-Type' : 'application/json'
         }
@@ -125,8 +125,26 @@ async function uploadFile(file: File, server: ServerInfo | null, dir: Array<stri
     });
 }
 
-function downloadFile(file: FsEntryInfo, dir: string[]) {
-    window.location.href = `http://localhost:8000/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(dir.join('/'))}`;
+function downloadFile(file: FsEntryInfo, server: ServerInfo | null, dir: string[]) {
+    window.location.href = createRequestUrl(server.socketAddress, `/api/download/${encodeURIComponent(file.name)}?directory=${encodeURIComponent(dir.join('/'))}`)
 }
 
-export {fetchFileServerList, fetchFileList, uploadFile, downloadFile, renameFile, createFolder};
+async function deleteFile(file: FsEntryInfo, server: ServerInfo | null, dir: Array<string>) {
+    const requestUrl = createRequestUrl(
+        server.socketAddress,
+        `/api/deleteFile/${dir.concat(file.name).join('/')}`
+    )
+    return fetch(requestUrl, {
+        method: "DELETE",
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error();
+            }
+        })
+        .catch(error => {
+            throw error;
+        })
+}
+
+export {fetchFileServerList, fetchFileList, uploadFile, downloadFile, renameFile, createFolder, deleteFile };

@@ -1,13 +1,13 @@
-package landrive.fileserver.handler.rename;
+package landrive.fileserver.handler.filerename;
 
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 import landrive.fileserver.filesystem.FsService;
 
-public class RenameHandler implements Handler<RoutingContext> {
+public class FileRenameHandler implements Handler<RoutingContext> {
     final private FsService fsService;
 
-    public RenameHandler(FsService fsService) {
+    public FileRenameHandler(FsService fsService) {
         this.fsService = fsService;
     }
 

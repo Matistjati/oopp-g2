@@ -1,6 +1,6 @@
 {
   "socketAddress": {
-    "hostname": "localhost",
+    "host": "localhost",
     "port": 8080
   }
 }

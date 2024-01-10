@@ -15,7 +15,7 @@ public class SocketAddressSerializer extends StdSerializer<SocketAddress> {
     @Override
     public void serialize(SocketAddress value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeStartObject();
-        gen.writeStringField("hostname", value.hostName());
+        gen.writeStringField("host", value.host());
         gen.writeNumberField("port", value.port());
         gen.writeEndObject();
     }
