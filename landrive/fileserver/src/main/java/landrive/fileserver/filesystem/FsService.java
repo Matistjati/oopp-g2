@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class FsService {
     private final FileSystem fs;
@@ -61,6 +62,30 @@ public class FsService {
                 ar.cause().printStackTrace();
             }
         });
+        return Future.succeededFuture();
+    }
+
+    public Future<Void> deleteFile(String path) {
+        final Path filePath = this.storageRoot.resolve(path);
+        if (!validPath(filePath)) {
+            return Future.failedFuture(new IllegalAccessException("Path is not valid."));
+        }
+        try {
+            final File file = filePath.toFile();
+            if (file.isDirectory()) {
+                    final String[] children = file.list();
+                    if (children != null) {
+                        for(final String s : children){
+                            final File child = new File(file, s);
+                            child.delete();
+                        }
+                    }
+            }
+            file.delete();
+        }
+        catch (Throwable e) {
+            return Future.failedFuture(e);
+        }
         return Future.succeededFuture();
     }
 

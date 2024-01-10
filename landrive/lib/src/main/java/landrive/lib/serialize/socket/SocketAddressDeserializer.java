@@ -18,7 +18,7 @@ public class SocketAddressDeserializer extends StdDeserializer<SocketAddress> {
         final JsonNode node = p.getCodec().readTree(p);
         return SocketAddress.inetSocketAddress(
                 node.get("port").asInt(),
-                node.get("hostname").textValue()
+                node.get("host").textValue()
         );
     }
 }

@@ -1,7 +1,7 @@
 import React, {Dispatch, SetStateAction, useContext, useEffect, useState} from 'react'
 import './FileBrowser.css'
 import RefreshButton from '../RefreshButton/RefreshButton'
-import {downloadFile, fetchFileList, uploadFile} from '../../lib/api'
+import {deleteFile, downloadFile, fetchFileList, uploadFile} from '../../lib/api'
 import FileRow from './components/FileRow/FileRow'
 import BackButton from '../BackButton/BackButton.tsx'
 import FileUploadButton from '../FileUploadButton/FileUploadButton.tsx'
@@ -95,6 +95,16 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
             handleRefresh={handleRefresh} />)
     }
 
+    const deleteHandler = (file: FsEntryInfo) => {
+        deleteFile(file, selectedServer, currentDirectory)
+            .then(() => {
+                handleRefresh()
+            })
+            .catch(error => {
+                console.error('Error deleting file:', error)
+            })
+    }
+
     const createFolderHandler = () => {
         modalState.openModal(<CreateFolderModal
             server={selectedServer}
@@ -117,15 +127,17 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
                 size={file.size}
                 type={"file"}
                 downloadHandler={() => {
-                    downloadFile(file, currentDirectory)
+                    downloadFile(file, selectedServer, currentDirectory)
                 }}
                 deleteHandler={() => {
-
+                    deleteHandler(file)
                 }}
                 renameHandler={() => {
                     renameHandler(file)
                 }}
-                onClick={() => {}}
+                onClick={() => {
+
+                }}
             />
         ))
 
@@ -141,7 +153,7 @@ function FileBrowser({selectedServer, currentDirectory, setCurrentDirectory, fil
 
                 }}
                 deleteHandler={() => {
-
+                    deleteHandler(dir)
                 }}
                 renameHandler={() => {
                     renameHandler(dir)

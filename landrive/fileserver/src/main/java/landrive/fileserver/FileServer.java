@@ -11,11 +11,12 @@ import io.vertx.uritemplate.Variables;
 import landrive.fileserver.config.Config;
 import landrive.fileserver.filesystem.FsService;
 import landrive.fileserver.handler.createfolder.CreateFolderHandlers;
+import landrive.fileserver.handler.filedelete.FileDeleteHandlers;
 import landrive.fileserver.handler.filedownload.FileDownloadHandlers;
 import landrive.fileserver.handler.filelist.FileListHandlers;
 import landrive.fileserver.handler.fileupload.FileUploadHandlers;
 import landrive.fileserver.handler.ping.PingHandlers;
-import landrive.fileserver.handler.rename.RenameHandlers;
+import landrive.fileserver.handler.filerename.FileRenameHandlers;
 import landrive.lib.cli.command.Command;
 import landrive.lib.route.MountingHandlers;
 import landrive.lib.server.ServerInfo;
@@ -42,8 +43,9 @@ public final class FileServer extends AbstractVerticle {
                 new FileDownloadHandlers(fsService),
                 new FileUploadHandlers(fsService),
                 new FileListHandlers(fsService),
-                new RenameHandlers(fsService),
+                new FileRenameHandlers(fsService),
                 new CreateFolderHandlers(fsService),
+                new FileDeleteHandlers(fsService),
                 new PingHandlers()
         );
         HttpServer httpServer = this.vertx.createHttpServer().requestHandler(router);

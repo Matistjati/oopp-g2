@@ -1,4 +1,4 @@
 interface SocketAddress {
-    hostname: string
+    host: string
     port: number
 }
