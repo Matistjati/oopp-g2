@@ -22,7 +22,7 @@ public final class App {
         final Vertx vertx = Vertx.vertx();
         final WebServer webServer = new WebServer(config, vertx);
         final Cli cli = new Cli(webServer);
-        final FileServerPinger pinger = new FileServerPinger(webServer.registry);
+        final FileServerPinger pinger = new FileServerPinger(webServer.registry, vertx);
         vertx.deployVerticle(webServer);
         vertx.deployVerticle(cli);
         vertx.setPeriodic(5000, pinger);
