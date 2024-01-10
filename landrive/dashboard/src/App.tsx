@@ -27,8 +27,7 @@ function App() {
         setFilter({...filter, extQuery: event.target.value})
     }
 
-
-    useWebSocket("ws://localhost:8080", {
+    useWebSocket("ws://" + window.location.hostname + ":8080", {
         onMessage: (message) => {
             let messageData = JSON.parse(message.data);
             let event = messageData.event;
