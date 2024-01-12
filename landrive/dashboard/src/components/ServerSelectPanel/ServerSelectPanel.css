@@ -1,5 +1,6 @@
 #server-select-panel {
     width: 20rem;
+    min-width: 20rem;
 }
 
 .server-select-panel-top {

@@ -13,13 +13,9 @@ public class FileDownloadHandler implements Handler<RoutingContext> {
     }
     @Override
     public void handle(RoutingContext ctx) {
-        String fileName = ctx.request().getParam("fileName");
-        String directory = ctx.request().getParam("directory");
-        System.out.println("FileDownloadHandler: " + fileName + " " + directory);
-        if (directory == null) {
-            directory = "";
-        }
+        final String path = ctx.request().getParam("path");
+        // System.out.println("FileDownloadHandler: " + fileName + " " + directory);
         HttpServerResponse response = ctx.response();
-        fsService.downloadFile(fileName, directory, response).onFailure(ctx::fail);
+        fsService.downloadFile(path, response).onFailure(ctx::fail);
     }
 }

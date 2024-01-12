@@ -45,24 +45,29 @@ public class FsService {
         return new FsDirectoryList(dir);
     }
 
-    public Future<Void> downloadFile(final String fileName, final String subDirectory, HttpServerResponse response) {
-        final Path filePath = this.storageRoot.resolve(subDirectory).resolve(fileName);
-        final String filePathString = filePath.toString();
-        System.out.println("Downloading file: " + fileName + " from directory: " + filePathString);
-        if (!validPath(filePath)) {
+    public Future<Void> downloadFile(final String path, HttpServerResponse response) {
+        System.out.println("Downloading file: " + path);
+        final Path filePath = this.storageRoot.resolve(path);
+        final Path fileName = filePath.getFileName();
+        if (!validPath(filePath) || filePath.toFile().isDirectory()) {
             return Future.failedFuture(new IllegalAccessException("Path is not valid."));
         }
         response.putHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
         response.putHeader(HttpHeaders.CONTENT_TYPE, "application/octet-stream");
-        response.sendFile(filePathString, ar -> {
-            if (ar.succeeded()) {
-                System.out.println("File downloaded successfully");
-            } else {
-                System.out.println("File download failed");
-                ar.cause().printStackTrace();
+        return response.sendFile(filePath.toString());
+    }
+
+    private void deleteDirectory(final File file) {
+        final String[] children = file.list();
+        if (children != null) {
+            for(final String s : children){
+                final File child = new File(file, s);
+                if (child.isDirectory()) {
+                    deleteDirectory(child);
+                }
+                child.delete();
             }
-        });
-        return Future.succeededFuture();
+        }
     }
 
     public Future<Void> deleteFile(String path) {
@@ -73,13 +78,7 @@ public class FsService {
         try {
             final File file = filePath.toFile();
             if (file.isDirectory()) {
-                    final String[] children = file.list();
-                    if (children != null) {
-                        for(final String s : children){
-                            final File child = new File(file, s);
-                            child.delete();
-                        }
-                    }
+                deleteDirectory(file);
             }
             file.delete();
         }

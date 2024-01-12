@@ -13,6 +13,6 @@ public class FileDownloadHandlers implements MountingHandlers {
 
     @Override
     public void mount(Router router) {
-        router.get("/api/download/:fileName").handler(new FileDownloadHandler(fsService));
+        router.getWithRegex("\\/api\\/downloadFile\\/(?<path>.*)").handler(new FileDownloadHandler(fsService));
     }
 }

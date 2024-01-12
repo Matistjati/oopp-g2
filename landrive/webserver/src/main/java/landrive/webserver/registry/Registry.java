@@ -30,6 +30,6 @@ public class Registry {
     }
 
     public List<ServerInfo> getFileServerList() {
-        return this.registered.values().stream().sorted().toList();
+        return this.registered.values().stream().toList();
     }
 }
